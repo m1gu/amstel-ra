@@ -1,0 +1,126 @@
+/* frontend/src/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap');
+
+:root {
+  --primary: #E31E24;
+  /* Amstel Red */
+  --primary-dark: #B3151A;
+  --secondary: #1A1A1A;
+  /* Dark Corporate */
+  --accent: #D4AF37;
+  /* Gold touch */
+  --bg-main: #F8F9FA;
+  --bg-card: #FFFFFF;
+  --text-main: #2D3436;
+  --text-muted: #636E72;
+  --border: #DFE6E9;
+  --success: #27AE60;
+  --error: #D63031;
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+.brand {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Base Components */
+button {
+  cursor: pointer;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius-md);
+  border: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+
+input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+  font-family: inherit;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.sidebar {
+  width: 260px;
+  background: var(--secondary);
+  color: white;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 2rem 1rem;
+}
+
+.main-content {
+  margin-left: 260px;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+/* Nav Item Styles */
+.nav-item {
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.2s;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.nav-item.active {
+  background: var(--primary);
+  color: white;
+}
