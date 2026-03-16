@@ -76,6 +76,13 @@ class App {
 }
 
 // Iniciar aplicación cuando el DOM esté listo
-window.addEventListener('DOMContentLoaded', () => {
+const bootApp = () => {
+    if (window.app) return;
     window.app = new App();
-});
+};
+
+if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', bootApp, { once: true });
+} else {
+    bootApp();
+}

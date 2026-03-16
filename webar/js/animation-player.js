@@ -21,6 +21,18 @@ export class AnimationPlayer {
             const response = await fetch(path);
             const ad = await response.json();
 
+            // Resolver rutas de assets image-based (u + p) en base al JSON actual.
+            // Sin esto, varios Lottie cargan pero quedan transparentes porque no encuentran sus PNGs.
+            const baseDir = path.substring(0, path.lastIndexOf('/') + 1);
+            if (Array.isArray(ad.assets)) {
+                ad.assets.forEach((asset) => {
+                    if (!asset || !asset.p) return;
+                    const u = asset.u || '';
+                    if (u.startsWith('http://') || u.startsWith('https://') || u.startsWith('data:')) return;
+                    asset.u = baseDir + u;
+                });
+            }
+
             // Fix ddd:0 - canvas renderer doesn't support 3D layers
             ad.ddd = 0;
             if (ad.layers) {
@@ -49,6 +61,8 @@ export class AnimationPlayer {
                     autoplay: false,
                     animationData: ad,
                     rendererSettings: {
+                        // Normaliza render entre desktop/móvil (evita offsets por devicePixelRatio alto)
+                        dpr: 1,
                         preserveAspectRatio: 'xMidYMid meet',
                         clearCanvas: true
                     }
@@ -57,10 +71,8 @@ export class AnimationPlayer {
                 this.animation.addEventListener('DOMLoaded', () => {
                     const lottieCanvas = container.querySelector('canvas');
                     if (lottieCanvas) {
-                        lottieCanvas.width = width;
-                        lottieCanvas.height = height;
-                        lottieCanvas.style.width = width + 'px';
-                        lottieCanvas.style.height = height + 'px';
+                        // No forzar width/height del canvas manualmente:
+                        // Lottie calcula internamente el tamaño correcto para evitar desalineaciones.
                         this.canvas = lottieCanvas;
                     }
                     console.log("Lottie: Animación lista. Loop:", this.loop, "Size:", width, "x", height);

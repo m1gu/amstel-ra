@@ -204,32 +204,6 @@
           "autoRotateSpeed": 1
         },
         {
-          "id": "el_1773385942231_g0x3s",
-          "type": "obj3d",
-          "url": "models/copa-final5.glb",
-          "name": "Nuevo Modelo 3D",
-          "position": [
-            0.6796776561775044,
-            0.45460311041924584,
-            0.1995655754551824
-          ],
-          "rotation": [
-            0,
-            0,
-            0
-          ],
-          "scale": [
-            0.7,
-            0.7,
-            0.7
-          ],
-          "appearAt": 0,
-          "fadeInDuration": 0.5,
-          "visible": true,
-          "autoRotate": true,
-          "autoRotateSpeed": 1
-        },
-        {
           "id": "el_1773388128256_57s26",
           "type": "lottie",
           "url": "animations/video-frame/videoframe.json",
@@ -278,6 +252,32 @@
           "fadeInDuration": 0.5,
           "visible": true,
           "loop": true
+        },
+        {
+          "id": "el_1773610716477_ux5t5",
+          "type": "obj3d",
+          "url": "models/copa-final6.glb",
+          "name": "Nuevo Modelo 3D",
+          "position": [
+            0.5939846703882199,
+            0.535839102326193,
+            0.3659451596342955
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            0.8,
+            0.8,
+            0.8
+          ],
+          "appearAt": 1,
+          "fadeInDuration": 0.5,
+          "visible": true,
+          "autoRotate": true,
+          "autoRotateSpeed": 1
         }
       ]
     },
@@ -965,32 +965,6 @@
           "loop": true
         },
         {
-          "id": "el_1773386110341_nup6j",
-          "type": "obj3d",
-          "url": "models/copa-final5.glb",
-          "name": "Nuevo Modelo 3D",
-          "position": [
-            -0.6157909033865865,
-            0.5487183013225994,
-            0.1860204924313788
-          ],
-          "rotation": [
-            0,
-            0,
-            0
-          ],
-          "scale": [
-            0.7,
-            0.7,
-            0.7
-          ],
-          "appearAt": 0,
-          "fadeInDuration": 0.5,
-          "visible": true,
-          "autoRotate": true,
-          "autoRotateSpeed": 1
-        },
-        {
           "id": "el_1773388690398_jxwar",
           "type": "lottie",
           "url": "animations/video-frame/videoframe.json",
@@ -1014,6 +988,32 @@
           "fadeInDuration": 0.5,
           "visible": true,
           "loop": false
+        },
+        {
+          "id": "el_1773610841160_j4m7t",
+          "type": "obj3d",
+          "url": "models/copa-final6.glb",
+          "name": "Nuevo Modelo 3D",
+          "position": [
+            -0.5926484076986874,
+            0.4721426595091724,
+            0.26448697043796887
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            0.8,
+            0.8,
+            0.8
+          ],
+          "appearAt": 1,
+          "fadeInDuration": 0.5,
+          "visible": true,
+          "autoRotate": true,
+          "autoRotateSpeed": 1
         }
       ]
     }
