@@ -50,6 +50,42 @@ body {
   overflow-x: hidden;
 }
 
+body.age-gate-active {
+  overflow: hidden;
+}
+
+body.age-gate-active #root {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+body.home-menu-active {
+  overflow: hidden;
+}
+
+body.home-menu-active #root {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+body.gallery-active {
+  overflow: hidden;
+}
+
+body.gallery-active #root {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+body.locator-active {
+  overflow: hidden;
+}
+
+body.locator-active #root {
+  height: 100dvh;
+  overflow: hidden;
+}
+
 h1,
 h2,
 h3,
@@ -428,15 +464,16 @@ input:focus {
 
 .age-gate-input-wrapper {
   background: white;
-  border-radius: 50px;
-  padding: 0.8rem 2rem;
+  border-radius: 999px;
+  padding: 0 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: none;
-  max-width: 280px;
+  border: 2px solid var(--amstel-gold);
+  width: min(208px, 60vw);
+  height: 42px;
   margin: 0 auto;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
 }
 
 .age-gate-input {
@@ -444,11 +481,18 @@ input:focus {
   background: transparent;
   width: 100%;
   text-align: center;
-  font-weight: 900;
+  font-weight: 700;
+  font-family: 'Bebas Neue', 'Outfit', sans-serif;
   color: var(--amstel-red);
-  font-size: 1.2rem;
-  letter-spacing: 0.1em;
+  font-size: 1.65rem;
+  letter-spacing: 0.035em;
   margin: 0;
+  text-transform: uppercase;
+}
+
+.age-gate-input::placeholder {
+  color: var(--amstel-red);
+  opacity: 0.75;
 }
 
 .age-gate-input:focus {
@@ -505,6 +549,313 @@ input:focus {
   transform: scale(0.98);
 }
 
+/* Age Gate Screen */
+
+.age-gate-screen {
+  position: fixed;
+  inset: 0;
+  height: 100dvh;
+  min-height: 100dvh;
+  width: 100vw;
+  max-width: 100vw;
+  overflow: hidden;
+}
+
+.age-gate-red-overlay {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background-image: url('./assets/images/fondo-rojo.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.age-gate-screen .lineas-superior,
+.age-gate-screen .lineas-inferior {
+  z-index: 10;
+  max-width: 390px;
+}
+
+.age-gate-screen .lineas-central {
+  z-index: 10;
+  width: 100%;
+  max-width: 430px;
+  top: 50%;
+}
+
+.age-gate-container {
+  width: min(100%, 400px);
+  max-width: 100%;
+  height: 100dvh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 0.9rem 0.95rem 1rem;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  gap: 0.25rem;
+  overflow: hidden;
+}
+
+.age-gate-title-wrap {
+  z-index: 30;
+  margin-top: calc(2.1rem + 15px);
+}
+
+.age-gate-title-image {
+  width: clamp(182px, 52vw, 236px);
+}
+
+.age-gate-hero-wrap {
+  position: relative;
+  width: 100%;
+  min-height: 350px;
+  z-index: 20;
+}
+
+.age-gate-hero {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, calc(-35% - 50px));
+  width: clamp(880px, 254vw, 1183px);
+  max-width: none;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.age-gate-form-wrap {
+  z-index: 40;
+  width: 100%;
+  margin-top: -1.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.age-gate-entry-group {
+  transform: translateY(-30px) scale(0.75);
+  transform-origin: top center;
+}
+
+.age-gate-caption {
+  text-transform: uppercase;
+  font-family: 'Bebas Neue', 'Outfit', sans-serif;
+  font-size: clamp(1.35rem, 5vw, 1.8rem);
+  line-height: 0.98;
+  letter-spacing: 0.02em;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.age-gate-form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.age-gate-submit {
+  width: 115px;
+  min-width: 115px;
+  height: 42px;
+  padding: 0 0.85rem;
+  border: 2px solid #f2e5b8;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-family: 'Bebas Neue', 'Outfit', sans-serif;
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.age-gate-logos {
+  display: block;
+  width: min(113px, 32.5vw);
+  margin: calc(0.35rem - 50px) auto 0;
+}
+
+.age-rejection-modal {
+  width: min(100%, 286px);
+  background: #fff;
+  border-radius: 8px;
+  padding: 0.8rem 0.75rem 0.65rem;
+  text-align: center;
+  color: #111;
+}
+
+.age-rejection-title {
+  margin: 0;
+  font-family: 'Bebas Neue', 'Outfit', sans-serif;
+  font-size: 1.7rem;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #111;
+}
+
+.age-rejection-text {
+  margin: 0.45rem 0 0;
+  padding-top: 0.45rem;
+  border-top: 1px solid #dddddd;
+  font-family: 'Bebas Neue', 'Outfit', sans-serif;
+  font-size: 1.4rem;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #111;
+}
+
+.age-rejection-highlight {
+  color: var(--amstel-red);
+}
+
+.age-rejection-actions {
+  margin-top: 0.45rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.age-rejection-close {
+  border: 1px solid var(--amstel-red);
+  background: #fff;
+  color: var(--amstel-red);
+  border-radius: 7px;
+  padding: 0.1rem 0.38rem;
+  font-family: 'Bebas Neue', 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  line-height: 1;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* Home Menu Screen */
+
+.home-menu-screen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  max-width: 100vw;
+  height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.home-menu-red-overlay {
+  position: absolute;
+  top: 40%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background-image: url('./assets/images/fondo-rojo.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.home-menu-screen .lineas-superior {
+  z-index: 10;
+  max-width: 390px;
+}
+
+.home-menu-screen .lineas-central {
+  z-index: 10;
+  width: 100%;
+  max-width: 430px;
+  top: 40%;
+}
+
+.home-menu-container {
+  width: min(100%, 400px);
+  max-width: 100%;
+  height: 100dvh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 0.95rem 0.95rem 6.25rem;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  gap: 0.25rem;
+  overflow: hidden;
+}
+
+.home-menu-title-wrap {
+  z-index: 30;
+  margin-top: calc(2.1rem + 15px);
+}
+
+.home-menu-title-image {
+  width: clamp(133px, 40.6vw, 189px);
+}
+
+.home-menu-hero-wrap {
+  position: relative;
+  width: 100%;
+  min-height: 350px;
+  z-index: 20;
+}
+
+.home-menu-hero {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, calc(-35% - 50px));
+  width: clamp(880px, 254vw, 1183px);
+  max-width: none;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.home-menu-actions {
+  z-index: 40;
+  width: 100%;
+  margin-top: -1.3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  transform: translateY(-45px) scale(0.5);
+  transform-origin: top center;
+}
+
+.home-menu-btn {
+  width: min(296px, 87vw);
+  min-height: 48px;
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  border: 2px solid var(--amstel-gold);
+  background: #fff;
+  color: var(--amstel-red);
+  font-family: 'Bebas Neue', 'Outfit', sans-serif;
+  font-size: clamp(1.25rem, 5.3vw, 1.7rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18);
+}
+
+.home-menu-btn-primary {
+  background: var(--amstel-red);
+  color: #fff;
+}
+
+.home-menu-btn:hover,
+.home-menu-btn:active {
+  transform: none;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18);
+}
+
+.home-menu-btn:hover {
+  background: #fff;
+  color: var(--amstel-red);
+  border-color: var(--amstel-gold);
+}
+
+.home-menu-btn-primary:hover {
+  background: var(--amstel-red);
+  color: #fff;
+}
+
 /* =================================
    RESPONSIVE
    ================================= */
@@ -536,6 +887,38 @@ input:focus {
     max-width: 600px !important;
   }
 
+  .age-gate-container {
+    width: 390px;
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+  }
+
+  .age-gate-title-wrap {
+    margin-top: 2.5rem;
+  }
+
+  .age-gate-hero-wrap {
+    min-height: 365px;
+  }
+
+  .age-gate-hero {
+    width: 680px;
+  }
+
+  .home-menu-container {
+    width: 390px;
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+  }
+
+  .home-menu-hero-wrap {
+    min-height: 365px;
+  }
+
+  .home-menu-hero {
+    width: 680px;
+  }
+
   body {
     background-color: #f0f0f0;
   }
@@ -550,13 +933,13 @@ input:focus {
   bottom: 0;
   left: 0;
   width: 100%;
-  max-height: 20vh;
+  max-height: none;
   z-index: 500;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   pointer-events: none; /* Allows physical clicks to pass through if no button is there */
-  background-color: var(--amstel-red);
+  background-color: transparent;
 }
 
 .global-footer > div {
@@ -569,12 +952,12 @@ input:focus {
   align-items: center;
   z-index: 502;
   position: relative;
-  margin-bottom: 0.5rem; /* Margen normal, ya no empujado al fondo */
+  margin-bottom: -4.7px;
 }
 
 .gf-logo-composite {
   width: 100%;
-  max-width: 130px; /* Reducido drásticamente como pedía el usuario (-60%) */
+  max-width: 118px;
   height: auto;
   object-fit: contain;
 }
@@ -585,28 +968,34 @@ input:focus {
   justify-content: center;
   z-index: 501;
   position: relative;
-  overflow: visible; /* Dejamos visible para no cortar al duplicar el alto */
-  margin-bottom: 0.3rem; 
+  overflow: hidden;
+  margin-bottom: 0;
 }
 
 .gf-arches {
-  width: 90%;
-  max-width: 450px;
-  transform: rotate(180deg) scaleY(1.2); /* Ajustado a petición del usuario */
+  width: 100%;
+  max-width: 400px;
+  transform: rotate(180deg);
   display: block;
 }
 
 .gf-row-legal {
   background-color: white;
   color: var(--amstel-red);
-  font-size: 6px; /* Letra bien pequeña rojo sobre blanco según requerimiento */
+  font-size: 5px;
   font-weight: 700;
   text-align: center;
-  padding: 4px 10px;
+  padding: 2px 6px;
   width: 100%;
   z-index: 503;
   position: relative;
-  font-family: sans-serif;
+  font-family: 'Inter', sans-serif;
   text-transform: none;
-  line-height: 1.2;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.home-footer {
+  z-index: 90;
 }

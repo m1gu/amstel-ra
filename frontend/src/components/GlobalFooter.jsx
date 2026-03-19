@@ -2,9 +2,9 @@ import React from 'react';
 import logosImg from '../assets/images/logos.png';
 import lineasInferior from '../assets/images/lineas-doradas-superior.png';
 
-const GlobalFooter = () => {
+const GlobalFooter = ({ className = '' }) => {
     return (
-        <div className="global-footer">
+        <div className={`global-footer ${className}`.trim()}>
             {/* Fila 1: Logos Composite */}
             <div className="gf-row-logos">
                 <img src={logosImg} alt="Conmebol y Amstel" className="gf-logo-composite" />

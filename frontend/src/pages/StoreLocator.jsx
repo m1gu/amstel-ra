@@ -1,11 +1,10 @@
-// frontend/src/pages/StoreLocator.jsx
-import React, { useState, useEffect } from 'react';
-import api from '../services/api';
+﻿import React, { useEffect, useState } from 'react';
 import { Search } from 'lucide-react';
+import api from '../services/api';
 
-// Assets
 import lineasSuperior from '../assets/images/lineas-doradas-superior.png';
 import fondoRojo from '../assets/images/fondo-rojo.png';
+import logosComposite from '../assets/images/logos.png';
 
 const StoreLocator = ({ onBack }) => {
     const [cities, setCities] = useState([]);
@@ -19,11 +18,20 @@ const StoreLocator = ({ onBack }) => {
         fetchCities();
     }, []);
 
+    useEffect(() => {
+        document.body.classList.add('locator-active');
+        return () => {
+            document.body.classList.remove('locator-active');
+        };
+    }, []);
+
     const fetchCities = async () => {
         try {
             const resp = await api.get('/locations/cities');
             setCities(resp.data);
-        } catch (err) { console.error(err); }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     const handleSearchChange = (e) => {
@@ -45,220 +53,361 @@ const StoreLocator = ({ onBack }) => {
         try {
             const resp = await api.get(`/locations?city=${city}`);
             setLocations(resp.data);
-        } catch (err) { console.error(err); }
+        } catch (err) {
+            console.error(err);
+        }
         setLoading(false);
     };
 
+    const clearSearch = () => {
+        setSearchTerm('');
+        setSuggestions([]);
+        setLocations([]);
+        setSelectedCity('');
+    };
+
     return (
-        <div className="brand-bg" style={{
-            minHeight: '100vh',
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            backgroundColor: 'white',
-            overflow: 'visible'
-        }}>
-            {/* Red Background Fill - Pushed to 530px from top to match VideoGallery */}
-            <div style={{
-                position: 'absolute',
-                top: '530px',
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundImage: `url(${fondoRojo})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center top',
-                zIndex: 1
-            }} />
+        <div className="brand-bg locator-screen">
+            <div className="locator-red-overlay" />
+            <img src={lineasSuperior} alt="" className="lineas-superior locator-lineas-superior" />
 
-            {/* Tactical Golden Lines (Global Classes) */}
-            <img src={lineasSuperior} alt="" className="lineas-superior" style={{ zIndex: 10 }} />
-            <img src={lineasSuperior} alt="" className="lineas-inferior" style={{ zIndex: 10, transform: 'translateX(-50%) rotate(180deg)' }} />
-
-            <div className="landing-container" style={{ position: 'relative', zIndex: 10, flex: 1, display: 'flex', flexDirection: 'column', paddingBottom: '20vh' }}>
-                <div style={{ padding: '5rem 1.5rem 2rem 1.5rem', textAlign: 'center' }}>
-
-                    <h2 style={{
-                        fontFamily: 'Bebas Neue',
-                        fontSize: '2.4rem',
-                        color: 'black',
-                        marginBottom: '1.5rem',
-                        lineHeight: '1.1',
-                        textTransform: 'uppercase',
-                        letterSpacing: '1px'
-                    }}>
-                        Selecciona la ciudad<br />y consigue el vaso<br />conmemorativo
+            <div className="landing-container locator-container">
+                <div className="locator-header">
+                    <h2 className="locator-title">
+                        Selecciona la ciudad
+                        <br />
+                        y consigue el vaso
+                        <br />
+                        conmemorativo
                     </h2>
 
-                    {/* Search Input with Autocomplete */}
-                    <div style={{ position: 'relative', maxWidth: '320px', margin: '0 auto' }}>
-                        <div style={{
-                            position: 'relative',
-                            borderRadius: '25px',
-                            border: '2px solid var(--amstel-gold)',
-                            background: 'white',
-                            overflow: 'hidden',
-                            display: 'flex',
-                            alignItems: 'center',
-                            zIndex: 20
-                        }}>
-                            <Search size={20} style={{ marginLeft: '1rem', color: '#666' }} />
+                    <div className="locator-search-wrap">
+                        <div className="locator-search-input-shell">
+                            <Search size={20} className="locator-search-icon" />
                             <input
                                 type="text"
                                 placeholder="Busca tu ciudad..."
                                 value={searchTerm}
                                 onChange={handleSearchChange}
-                                style={{
-                                    padding: '0.45rem 1rem',
-                                    border: 'none',
-                                    width: '100%',
-                                    fontSize: '1rem',
-                                    fontWeight: '500',
-                                    color: '#000',
-                                    outline: 'none'
-                                }}
+                                className="locator-search-input"
                             />
                             {searchTerm && (
-                                <button
-                                    onClick={() => { setSearchTerm(''); setSuggestions([]); setLocations([]); setSelectedCity(''); }}
-                                    style={{ background: 'none', border: 'none', padding: '0.5rem', cursor: 'pointer', display: 'flex' }}
-                                >
-                                    <span style={{ fontSize: '1.2rem', color: '#999' }}>×</span>
+                                <button onClick={clearSearch} className="locator-clear-btn" type="button">
+                                    x
                                 </button>
                             )}
                         </div>
 
                         {suggestions.length > 0 && (
-                            <div className="suggestions-list" style={{
-                                position: 'absolute',
-                                top: '100%',
-                                left: 0,
-                                right: 0,
-                                background: 'white',
-                                borderRadius: '0 0 15px 15px',
-                                marginTop: '2px',
-                                boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
-                                zIndex: 100,
-                                maxHeight: '200px',
-                                overflowY: 'auto',
-                                border: '1px solid #ddd'
-                            }}>
+                            <div className="locator-suggestions-list">
                                 {suggestions.map(s => (
-                                    <div
+                                    <button
                                         key={s}
+                                        type="button"
                                         onClick={() => handleCitySelect(s)}
-                                        style={{
-                                            padding: '0.8rem 1.5rem',
-                                            textAlign: 'left',
-                                            color: '#333',
-                                            fontWeight: '600',
-                                            borderTop: '1px solid #eee',
-                                            cursor: 'pointer'
-                                        }}
+                                        className="locator-suggestion-item"
                                     >
                                         {s}
-                                    </div>
+                                    </button>
                                 ))}
                             </div>
                         )}
                     </div>
                 </div>
 
-                <div style={{ flex: 1, padding: '0 1.5rem 2.5rem 1.5rem' }}>
+                <div className="locator-results-shell">
                     {selectedCity && !loading && (
-                        <p style={{
-                            textAlign: 'center',
-                            color: 'black',
-                            fontFamily: 'Bebas Neue',
-                            fontSize: '1.6rem',
-                            marginBottom: '1.5rem',
-                            textTransform: 'uppercase'
-                        }}>
-                            {locations.length} LOCALES DISPONIBLES
-                        </p>
+                        <p className="locator-count">{locations.length} LOCALES DISPONIBLES</p>
                     )}
 
                     {loading ? (
-                        <p style={{ textAlign: 'center', color: 'black', marginTop: '2rem', fontFamily: 'Bebas Neue' }}>Buscando locales...</p>
+                        <p className="locator-loading">Buscando locales...</p>
                     ) : (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                        <div className="locator-results-frame">
                             {locations.length > 0 ? (
-                                locations.map((loc) => (
-                                    <div key={loc.id} style={{
-                                        background: 'rgba(255, 255, 255, 0.95)',
-                                        borderRadius: '12px',
-                                        padding: '1.2rem',
-                                        position: 'relative',
-                                        boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '0.3rem'
-                                    }}>
-                                        <h3 style={{
-                                            fontSize: '1.2rem',
-                                            color: '#333',
-                                            fontFamily: 'Bebas Neue',
-                                            letterSpacing: '0.5px'
-                                        }}>
-                                            {loc.store_name}
-                                        </h3>
-                                        <p style={{ fontSize: '0.9rem', color: '#666', fontWeight: 500 }}>
-                                            {loc.address}
-                                        </p>
-                                    </div>
-                                ))
+                                <div className="locator-cards-list">
+                                    {locations.map((loc) => (
+                                        <div key={loc.id} className="locator-card">
+                                            <h3 className="locator-card-title">{loc.store_name}</h3>
+                                            <p className="locator-card-text">{loc.address}</p>
+                                        </div>
+                                    ))}
+                                </div>
                             ) : (
-                                selectedCity && <p style={{ textAlign: 'center', color: 'black', opacity: 0.6, marginTop: '2rem' }}>No se encontraron locales en esta ciudad.</p>
+                                selectedCity && <p className="locator-empty">No se encontraron locales en esta ciudad.</p>
                             )}
                         </div>
                     )}
                 </div>
+            </div>
 
-                {/* Navigation Buttons */}
-                <div style={{
-                    marginTop: 'auto',
-                    padding: '0 1.5rem 2rem 1.5rem',
-                    display: 'flex',
-                    zIndex: 300,
-                    justifyContent: 'center'
-                }}>
-                    <button
-                        className="btn-volver-gallery"
-                        onClick={onBack}
-                        style={{
-                            padding: '8px 19.2px',
-                            width: 'auto',
-                            fontSize: '16px',
-                            display: 'inline-block',
-                            background: 'white',
-                            color: 'var(--amstel-red)',
-                            border: '2px solid var(--amstel-gold)',
-                            borderRadius: '50px',
-                            fontFamily: 'Bebas Neue',
-                            boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        VOLVER AL MENÚ
+            <div className="locator-footer">
+                <div className="locator-footer-top">
+                    <button className="btn-volver-gallery locator-back-btn" onClick={onBack}>
+                        VOLVER AL MENU
                     </button>
+                    <img src={logosComposite} alt="Conmebol Libertadores y Amstel" className="locator-footer-logos" />
+                </div>
+                <div className="locator-footer-arches">
+                    <img src={lineasSuperior} alt="" className="locator-footer-arches-img" />
+                </div>
+                <div className="locator-footer-legal">
+                    © ADVERTENCIA: EL CONSUMO EXCESIVO DE ALCOHOL PUEDE PERJUDICAR SU SALUD. MINISTERIO DE SALUD PUBLICA DEL ECUADOR.
                 </div>
             </div>
 
             <style>{`
-                .white-bottom-bar {
-                    background-color: white;
-                    color: #666;
-                    font-size: 0.65rem;
-                    text-align: center;
-                    padding: 0.8rem 1.5rem;
-                    width: 100%;
-                    position: relative;
-                    z-index: 100;
-                    font-family: sans-serif;
-                    text-transform: none;
+                .locator-screen {
+                    position: fixed;
+                    inset: 0;
+                    width: 100vw;
+                    max-width: 100vw;
+                    height: 100dvh;
+                    min-height: 100dvh;
+                    overflow: hidden;
                 }
-                .btn-volver-gallery {
+                .locator-red-overlay {
+                    position: absolute;
+                    top: 40%;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    z-index: 1;
+                    background-image: url('${fondoRojo}');
+                    background-size: cover;
+                    background-position: center;
+                }
+                .locator-lineas-superior {
+                    z-index: 12;
+                    max-width: 390px;
+                }
+                .locator-container {
+                    width: min(100%, 400px);
+                    max-width: 100%;
+                    height: 100dvh;
+                    min-height: 100dvh;
+                    margin: 0 auto;
+                    padding: calc(2.1rem + 15px) 0.95rem 104px;
+                    align-items: center;
+                    justify-content: flex-start;
+                    text-align: center;
+                    z-index: 20;
+                    overflow: hidden;
+                }
+                .locator-header {
+                    width: 100%;
+                    z-index: 25;
+                    transform: translateY(20px);
+                }
+                .locator-title {
+                    font-family: 'Bebas Neue', sans-serif;
+                    text-transform: uppercase;
+                    color: #111;
+                    font-weight: 400;
+                    letter-spacing: 0.01em;
+                    font-size: clamp(1.41rem, 4.32vw, 1.92rem);
+                    line-height: 0.95;
+                    margin-bottom: 1.15rem;
+                }
+                .locator-search-wrap {
+                    position: relative;
+                    width: min(100%, 289px);
+                    margin: 0 auto;
+                    transform: translateY(-15px);
+                }
+                .locator-search-input-shell {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    border-radius: 999px;
+                    border: 2px solid var(--amstel-gold);
+                    background: #fff;
+                    overflow: hidden;
+                    z-index: 30;
+                }
+                .locator-search-icon {
+                    margin-left: 1rem;
+                    color: #737373;
+                    flex: 0 0 auto;
+                }
+                .locator-search-input {
+                    border: none;
+                    width: 100%;
+                    background: transparent;
+                    color: #111;
+                    font-size: 1rem;
+                    font-weight: 500;
+                    padding: 0.52rem 0.75rem;
+                    outline: none;
+                }
+                .locator-clear-btn {
+                    background: none;
+                    border: none;
+                    color: #9a9a9a;
+                    font-size: 1.25rem;
+                    line-height: 1;
+                    padding: 0 0.8rem 0.05rem;
                     cursor: pointer;
+                }
+                .locator-suggestions-list {
+                    position: absolute;
+                    top: calc(100% + 2px);
+                    left: 0;
+                    right: 0;
+                    background: #fff;
+                    border-radius: 0 0 14px 14px;
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+                    z-index: 40;
+                    overflow: hidden;
+                }
+                .locator-suggestion-item {
+                    width: 100%;
+                    text-align: left;
+                    border: none;
+                    background: #fff;
+                    color: #333;
+                    font-weight: 600;
+                    font-size: 1rem;
+                    padding: 0.72rem 1.2rem;
+                    border-top: 1px solid #ececec;
+                    cursor: pointer;
+                    transition: background 0.15s ease, color 0.15s ease;
+                }
+                .locator-suggestion-item:hover {
+                    background: var(--amstel-red);
+                    color: #fff;
+                }
+                .locator-results-shell {
+                    width: min(100%, 340px);
+                    margin: 0.8rem auto 0;
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    z-index: 20;
+                    min-height: 0;
+                }
+                .locator-count {
+                    font-family: 'Bebas Neue', sans-serif;
+                    color: #111;
+                    font-size: 1rem;
+                    margin-bottom: 0.6rem;
+                    line-height: 1;
+                }
+                .locator-loading,
+                .locator-empty {
+                    color: #fff;
+                    opacity: 0.9;
+                    text-align: center;
+                    margin-top: 1rem;
+                }
+                .locator-results-frame {
+                    flex: 1;
+                    min-height: 0;
+                    border-radius: 14px;
+                    padding: 0.15rem;
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                    background: transparent;
+                }
+                .locator-results-frame::-webkit-scrollbar {
+                    width: 5px;
+                }
+                .locator-results-frame::-webkit-scrollbar-thumb {
+                    background: rgba(255,255,255,0.5);
+                    border-radius: 8px;
+                }
+                .locator-cards-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.55rem;
+                }
+                .locator-card {
+                    background: rgba(255,255,255,0.96);
+                    border-radius: 12px;
+                    padding: 0.95rem 1rem;
+                    text-align: left;
+                }
+                .locator-card-title {
+                    font-family: 'Bebas Neue', sans-serif;
+                    color: #242424;
+                    font-size: 1.12rem;
+                    letter-spacing: 0.02em;
+                    margin: 0 0 0.25rem;
+                }
+                .locator-card-text {
+                    margin: 0;
+                    color: #616161;
+                    font-size: 12px;
+                    line-height: 1.35;
+                    font-weight: 500;
+                }
+                .locator-footer {
+                    position: fixed;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    z-index: 70;
+                    pointer-events: none;
+                }
+                .locator-footer > div {
+                    pointer-events: auto;
+                }
+                .locator-footer-top {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 0 0.95rem 0;
+                    transform: translateY(15px);
+                    margin-bottom: -12px;
+                }
+                .locator-back-btn {
+                    width: 115px;
+                    min-height: 34px;
+                    border-radius: 999px;
+                    border: 2px solid var(--amstel-gold);
+                    background: #fff;
+                    color: var(--amstel-red);
+                    font-family: 'Bebas Neue', sans-serif;
+                    font-size: 0.95rem;
+                    line-height: 1;
+                    padding: 0.25rem 0.75rem;
+                    box-shadow: 0 2px 0 rgba(0,0,0,0.14);
+                    text-align: center;
+                }
+                .locator-footer-logos {
+                    width: 106px;
+                }
+                .locator-footer-arches {
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    overflow: hidden;
+                    margin-bottom: -2px;
+                }
+                .locator-footer-arches-img {
+                    width: 100%;
+                    max-width: 400px;
+                    transform: rotate(180deg);
+                    display: block;
+                }
+                .locator-footer-legal {
+                    background: #fff;
+                    color: var(--amstel-red);
+                    font-size: 5px;
+                    line-height: 1;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-align: center;
+                    font-family: 'Inter', sans-serif;
+                    font-weight: 700;
+                    padding: 2px 6px;
+                }
+                @media (min-width: 1024px) {
+                    .locator-container {
+                        width: 390px;
+                        padding-left: 0.9rem;
+                        padding-right: 0.9rem;
+                    }
                 }
             `}</style>
         </div>
