@@ -1,0 +1,12 @@
+RewriteEngine On
+
+# Permitir validaciones SSL
+RewriteCond %{REQUEST_URI} ^/\.well-known/ [NC]
+RewriteRule ^ - [L]
+
+# Forzar HTTPS (sin loop)
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# Solo la raíz del dominio -> subcarpeta
+RewriteRule ^$ /vasodelahistoria/ [R=302,L]

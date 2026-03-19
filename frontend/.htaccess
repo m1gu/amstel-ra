@@ -1,6 +1,16 @@
+DirectoryIndex index.html index.php
+Options -Indexes
+
 RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} !^/api/
-RewriteCond %{REQUEST_URI} !^/webar/
-RewriteRule ^ index.html [QSA,L]
+RewriteBase /vasodelahistoria/
+
+# No tocar API ni WebAR
+RewriteRule ^(api|webar)(/|$) - [L]
+
+# Si existe archivo o carpeta real, servirlo normal
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# SPA fallback
+RewriteRule ^ index.html [L]

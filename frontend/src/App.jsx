@@ -34,7 +34,7 @@ function App() {
   };
 
   return (
-    <BrowserRouter basename="/amstel">
+    <BrowserRouter basename="/vasodelahistoria">
       <Routes>
         {/* Rutas Públicas */}
         <Route path="/" element={<Landing />} />
