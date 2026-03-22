@@ -179,7 +179,7 @@ const StoreLocator = ({ onBack }) => {
                 }
                 .locator-lineas-superior {
                     z-index: 12;
-                    max-width: 390px;
+                    max-width: 234px;
                 }
                 .locator-container {
                     width: min(100%, 400px);

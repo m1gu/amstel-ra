@@ -49,7 +49,7 @@
             1.3,
             1
           ],
-          "appearAt": 1.5,
+          "appearAt": 0.5,
           "fadeInDuration": 0.5,
           "visible": true,
           "loop": false
@@ -74,34 +74,10 @@
             1,
             1
           ],
-          "appearAt": 2,
+          "appearAt": 0,
           "fadeInDuration": 0.5,
           "visible": true,
           "flagWave": true
-        },
-        {
-          "id": "el_1772387368167_j1efj",
-          "type": "lottie",
-          "url": "animations/jarro-1/1-6/Jarro 1-6.json",
-          "name": "Jarro 1-6.json",
-          "position": [
-            0.5763014235756556,
-            -0.7961266928515555,
-            0.6695213239121216
-          ],
-          "rotation": [
-            0,
-            0,
-            0
-          ],
-          "scale": [
-            1,
-            1,
-            1
-          ],
-          "appearAt": 2.5,
-          "fadeInDuration": 0.5,
-          "visible": true
         },
         {
           "id": "el_1772387535866_m1bo1",
@@ -171,7 +147,7 @@
             0.1,
             0.1
           ],
-          "appearAt": 0,
+          "appearAt": 1,
           "fadeInDuration": 0.5,
           "visible": true,
           "autoRotate": true,
@@ -197,36 +173,11 @@
             0.1,
             0.1
           ],
-          "appearAt": 0,
+          "appearAt": 1,
           "fadeInDuration": 0.5,
           "visible": true,
           "autoRotate": true,
           "autoRotateSpeed": 1
-        },
-        {
-          "id": "el_1773388128256_57s26",
-          "type": "lottie",
-          "url": "animations/video-frame/videoframe.json",
-          "name": "Nueva Animación",
-          "position": [
-            0,
-            -0.015299528240860338,
-            0.4470231011329244
-          ],
-          "rotation": [
-            0,
-            0,
-            0
-          ],
-          "scale": [
-            2,
-            1.4,
-            1
-          ],
-          "appearAt": 4,
-          "fadeInDuration": 0.5,
-          "visible": true,
-          "loop": false
         },
         {
           "id": "el_1773388442839_bbiav",
@@ -248,7 +199,7 @@
             0.8,
             1
           ],
-          "appearAt": 0,
+          "appearAt": 1.5,
           "fadeInDuration": 0.5,
           "visible": true,
           "loop": true
@@ -273,11 +224,86 @@
             0.8,
             0.8
           ],
-          "appearAt": 1,
+          "appearAt": 0,
           "fadeInDuration": 0.5,
           "visible": true,
           "autoRotate": true,
           "autoRotateSpeed": 1
+        },
+        {
+          "id": "el_1773972023219_6b8kl",
+          "type": "lottie",
+          "url": "animations/video-frame2/videoframe2.json",
+          "name": "Nueva Animación",
+          "position": [
+            0,
+            -0.024028178083771973,
+            0.44404362792483476
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            2.7,
+            1.5,
+            1
+          ],
+          "appearAt": 3,
+          "fadeInDuration": 0.5,
+          "visible": true,
+          "loop": false
+        },
+        {
+          "id": "el_1773976671444_f6u67",
+          "type": "lottie",
+          "url": "animations/jugador-1/jugador-1.json",
+          "name": "Nueva Animación",
+          "position": [
+            0.4799812292926453,
+            -0.7026276212361826,
+            0.7857262613233877
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1.4,
+            1,
+            1
+          ],
+          "appearAt": 1.5,
+          "fadeInDuration": 0.5,
+          "visible": true,
+          "loop": true
+        },
+        {
+          "id": "el_1773978746519_k6uat",
+          "type": "lottie",
+          "url": "animations/2022-marcador/2022-marcador.json",
+          "name": "Nueva Animación",
+          "position": [
+            0,
+            -0.3755864881489216,
+            0.6274162763312057
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            2,
+            1.3,
+            1
+          ],
+          "appearAt": 4.5,
+          "fadeInDuration": 0.5,
+          "visible": true,
+          "loop": false
         }
       ]
     },
@@ -330,7 +356,7 @@
             0.8,
             1
           ],
-          "appearAt": 0.5,
+          "appearAt": 1.5,
           "fadeInDuration": 0.5,
           "visible": true
         },
@@ -354,7 +380,7 @@
             1.3,
             1
           ],
-          "appearAt": 1,
+          "appearAt": 0,
           "fadeInDuration": 0.5,
           "visible": true
         },
@@ -402,7 +428,7 @@
             0.8,
             1
           ],
-          "appearAt": 2,
+          "appearAt": 0,
           "fadeInDuration": 0.5,
           "visible": true,
           "flagWave": true
@@ -427,7 +453,7 @@
             1.5,
             1
           ],
-          "appearAt": 2.5,
+          "appearAt": 0.5,
           "fadeInDuration": 0.5,
           "visible": true,
           "loop": false
@@ -457,31 +483,6 @@
           "visible": true
         },
         {
-          "id": "el_1773388526116_vip4u",
-          "type": "lottie",
-          "url": "animations/video-frame/videoframe.json",
-          "name": "Nueva Animación",
-          "position": [
-            0,
-            -0.22366563231203457,
-            0.4957417171801892
-          ],
-          "rotation": [
-            0,
-            0,
-            0
-          ],
-          "scale": [
-            2,
-            1.4,
-            1
-          ],
-          "appearAt": 4,
-          "fadeInDuration": 0.5,
-          "visible": true,
-          "loop": false
-        },
-        {
           "id": "el_1773388953349_qiok4",
           "type": "lottie",
           "url": "animations/mano1/mano1.json",
@@ -501,7 +502,7 @@
             0.3,
             1
           ],
-          "appearAt": 0,
+          "appearAt": 1,
           "fadeInDuration": 0.5,
           "visible": true,
           "loop": true
@@ -526,10 +527,60 @@
             0.3,
             1
           ],
-          "appearAt": 0,
+          "appearAt": 1,
           "fadeInDuration": 0.5,
           "visible": true,
           "loop": true
+        },
+        {
+          "id": "el_1773972256806_0n37y",
+          "type": "lottie",
+          "url": "animations/video-frame2/videoframe2.json",
+          "name": "Nueva Animación",
+          "position": [
+            0,
+            -0.2263484008917838,
+            0.5177974322163479
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            2.75,
+            1.55,
+            1
+          ],
+          "appearAt": 3,
+          "fadeInDuration": 0.5,
+          "visible": true,
+          "loop": false
+        },
+        {
+          "id": "el_1773978982174_ms9t4",
+          "type": "lottie",
+          "url": "animations/2023-marcador/2023-marcador.json",
+          "name": "Nueva Animación",
+          "position": [
+            0,
+            -0.5799910559180503,
+            0.5962429204703639
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            2,
+            1.3,
+            1
+          ],
+          "appearAt": 4.5,
+          "fadeInDuration": 0.5,
+          "visible": true,
+          "loop": false
         }
       ]
     },
@@ -558,7 +609,7 @@
             1,
             1
           ],
-          "appearAt": 1,
+          "appearAt": 0,
           "fadeInDuration": 0.5,
           "visible": true,
           "flagWave": true
@@ -583,7 +634,7 @@
             1,
             1
           ],
-          "appearAt": 0.5,
+          "appearAt": 0,
           "fadeInDuration": 0.5,
           "visible": true
         },
@@ -651,11 +702,11 @@
             0
           ],
           "scale": [
-            1,
+            1.1,
             1.3,
             1
           ],
-          "appearAt": 2,
+          "appearAt": 0.5,
           "fadeInDuration": 0.5,
           "visible": true,
           "loop": false
@@ -680,7 +731,7 @@
             1.5,
             1
           ],
-          "appearAt": 2.5,
+          "appearAt": 1.5,
           "fadeInDuration": 0.5,
           "visible": true
         },
@@ -728,7 +779,7 @@
             0.1,
             0.1
           ],
-          "appearAt": 0,
+          "appearAt": 1,
           "fadeInDuration": 0.5,
           "visible": true,
           "autoRotate": true,
@@ -754,21 +805,46 @@
             0.1,
             0.1
           ],
-          "appearAt": 0,
+          "appearAt": 1,
           "fadeInDuration": 0.5,
           "visible": true,
           "autoRotate": true,
           "autoRotateSpeed": 1
         },
         {
-          "id": "el_1773388638668_1cjmx",
+          "id": "el_1773972432273_3t4bv",
           "type": "lottie",
-          "url": "animations/video-frame/videoframe.json",
+          "url": "animations/video-frame2/videoframe2.json",
           "name": "Nueva Animación",
           "position": [
             0,
-            -0.045233981274401036,
-            0.5936844045044023
+            -0.0456584955138738,
+            0.5990795428888807
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            2.75,
+            1.55,
+            1
+          ],
+          "appearAt": 3,
+          "fadeInDuration": 0.5,
+          "visible": true,
+          "loop": false
+        },
+        {
+          "id": "el_1773979111558_1pe4y",
+          "type": "lottie",
+          "url": "animations/2024-marcador/2024-marcador.json",
+          "name": "Nueva Animación",
+          "position": [
+            0,
+            -0.40160920932991273,
+            0.639842223505845
           ],
           "rotation": [
             0,
@@ -777,10 +853,10 @@
           ],
           "scale": [
             2,
-            1.4,
+            1.3,
             1
           ],
-          "appearAt": 4,
+          "appearAt": 4.5,
           "fadeInDuration": 0.5,
           "visible": true,
           "loop": false
@@ -812,7 +888,7 @@
             1,
             1
           ],
-          "appearAt": 0.5,
+          "appearAt": 0,
           "fadeInDuration": 0.5,
           "visible": true,
           "flagWave": true
@@ -837,7 +913,7 @@
             1.2,
             1.5
           ],
-          "appearAt": 1,
+          "appearAt": 1.5,
           "fadeInDuration": 0.5,
           "visible": true
         },
@@ -861,10 +937,10 @@
             1,
             1
           ],
-          "appearAt": 2,
+          "appearAt": 1.5,
           "fadeInDuration": 0.5,
           "visible": true,
-          "loop": false
+          "loop": true
         },
         {
           "id": "el_1772402625311_t2lz7",
@@ -910,7 +986,7 @@
             1.5,
             1
           ],
-          "appearAt": 2.5,
+          "appearAt": 0.5,
           "fadeInDuration": 0.5,
           "visible": true,
           "loop": false
@@ -935,7 +1011,7 @@
             0.7,
             1
           ],
-          "appearAt": 4.5,
+          "appearAt": 4,
           "fadeInDuration": 0.5,
           "visible": true
         },
@@ -959,35 +1035,10 @@
             0.9,
             1
           ],
-          "appearAt": 0,
+          "appearAt": 1.5,
           "fadeInDuration": 0.5,
           "visible": true,
           "loop": true
-        },
-        {
-          "id": "el_1773388690398_jxwar",
-          "type": "lottie",
-          "url": "animations/video-frame/videoframe.json",
-          "name": "Nueva Animación",
-          "position": [
-            0,
-            -0.11839137204986455,
-            0.43921961574111434
-          ],
-          "rotation": [
-            0,
-            0,
-            0
-          ],
-          "scale": [
-            2,
-            1.4,
-            1
-          ],
-          "appearAt": 4,
-          "fadeInDuration": 0.5,
-          "visible": true,
-          "loop": false
         },
         {
           "id": "el_1773610841160_j4m7t",
@@ -1009,11 +1060,61 @@
             0.8,
             0.8
           ],
-          "appearAt": 1,
+          "appearAt": 0,
           "fadeInDuration": 0.5,
           "visible": true,
           "autoRotate": true,
           "autoRotateSpeed": 1
+        },
+        {
+          "id": "el_1773972684458_hsqxs",
+          "type": "lottie",
+          "url": "animations/video-frame2/videoframe2.json",
+          "name": "Nueva Animación",
+          "position": [
+            0,
+            -0.12190611532499354,
+            0.46252419880512297
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            2.75,
+            1.55,
+            1
+          ],
+          "appearAt": 3,
+          "fadeInDuration": 0.5,
+          "visible": true,
+          "loop": false
+        },
+        {
+          "id": "el_1773979210817_whg34",
+          "type": "lottie",
+          "url": "animations/2025-marcador/2025-marcador.json",
+          "name": "Nueva Animación",
+          "position": [
+            0,
+            -0.4790050850485595,
+            0.5526594630400222
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            2,
+            1.3,
+            1
+          ],
+          "appearAt": 4.5,
+          "fadeInDuration": 0.5,
+          "visible": true,
+          "loop": false
         }
       ]
     }

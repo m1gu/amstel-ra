@@ -369,7 +369,7 @@ const VideoGallery = ({ onBack }) => {
                 }
                 .gallery-lineas-superior {
                     z-index: 12;
-                    max-width: 390px;
+                    max-width: 234px;
                 }
                 .gallery-container {
                     width: min(100%, 400px);

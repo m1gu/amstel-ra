@@ -4,12 +4,13 @@ import VideoGallery from './VideoGallery';
 import StoreLocator from './StoreLocator';
 import GlobalFooter from '../components/GlobalFooter';
 
-import headerImg from '../assets/images/header.png';
 import lineasSuperior from '../assets/images/lineas-doradas-superior.png';
 import lineasCentral from '../assets/images/lineas-doradas-central.png';
 import titulo1 from '../assets/images/titulo1.png';
 import titulo2 from '../assets/images/titulo2.png';
 import logosComposite from '../assets/images/logos.png';
+
+const headerImg = `${import.meta.env.BASE_URL}assets/images/header2.png`;
 
 const Landing = () => {
     const [ageVerified, setAgeVerified] = useState(sessionStorage.getItem('amstel_age_gate') === 'true');
