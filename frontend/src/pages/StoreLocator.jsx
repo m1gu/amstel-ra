@@ -158,6 +158,10 @@ const StoreLocator = ({ onBack }) => {
 
             <style>{`
                 .locator-screen {
+                    --locator-gap: clamp(10px, 1.8vh, 15px);
+                    --locator-gold-line-w: 80vw;
+                    --locator-gold-line-h: calc(var(--locator-gold-line-w) * 121 / 735);
+                    --locator-title-target-w: 80vw;
                     position: fixed;
                     inset: 0;
                     width: 100vw;
@@ -179,7 +183,8 @@ const StoreLocator = ({ onBack }) => {
                 }
                 .locator-lineas-superior {
                     z-index: 12;
-                    max-width: 234px;
+                    width: var(--locator-gold-line-w);
+                    max-width: none;
                 }
                 .locator-container {
                     width: min(100%, 400px);
@@ -187,7 +192,10 @@ const StoreLocator = ({ onBack }) => {
                     height: 100dvh;
                     min-height: 100dvh;
                     margin: 0 auto;
-                    padding: calc(2.1rem + 15px) 0.95rem 104px;
+                    padding:
+                        calc(env(safe-area-inset-top, 0px) + var(--locator-gold-line-h) + var(--locator-gap))
+                        0.95rem
+                        104px;
                     align-items: center;
                     justify-content: flex-start;
                     text-align: center;
@@ -197,7 +205,7 @@ const StoreLocator = ({ onBack }) => {
                 .locator-header {
                     width: 100%;
                     z-index: 25;
-                    transform: translateY(20px);
+                    transform: none;
                 }
                 .locator-title {
                     font-family: 'Bebas Neue', sans-serif;
@@ -205,15 +213,20 @@ const StoreLocator = ({ onBack }) => {
                     color: #111;
                     font-weight: 400;
                     letter-spacing: 0.01em;
-                    font-size: clamp(1.41rem, 4.32vw, 1.92rem);
-                    line-height: 0.95;
-                    margin-bottom: 1.15rem;
+                    font-size: clamp(1.95rem, 6.4vw, 2.56rem);
+                    line-height: 0.9;
+                    width: var(--locator-title-target-w);
+                    max-width: none;
+                    margin-left: auto;
+                    margin-right: auto;
+                    margin-bottom: 0;
                 }
                 .locator-search-wrap {
                     position: relative;
                     width: min(100%, 289px);
                     margin: 0 auto;
-                    transform: translateY(-15px);
+                    transform: none;
+                    margin-top: 30px;
                 }
                 .locator-search-input-shell {
                     position: relative;
@@ -279,7 +292,7 @@ const StoreLocator = ({ onBack }) => {
                 }
                 .locator-results-shell {
                     width: min(100%, 340px);
-                    margin: 0.8rem auto 0;
+                    margin: 15px auto 0;
                     flex: 1;
                     display: flex;
                     flex-direction: column;
@@ -290,7 +303,7 @@ const StoreLocator = ({ onBack }) => {
                     font-family: 'Bebas Neue', sans-serif;
                     color: #111;
                     font-size: 1rem;
-                    margin-bottom: 0.6rem;
+                    margin-bottom: 0.35rem;
                     line-height: 1;
                 }
                 .locator-loading,
@@ -361,21 +374,21 @@ const StoreLocator = ({ onBack }) => {
                     margin-bottom: -12px;
                 }
                 .locator-back-btn {
-                    width: 115px;
-                    min-height: 34px;
+                    width: 98px;
+                    min-height: 29px;
                     border-radius: 999px;
                     border: 2px solid var(--amstel-gold);
                     background: #fff;
                     color: var(--amstel-red);
                     font-family: 'Bebas Neue', sans-serif;
-                    font-size: 0.95rem;
+                    font-size: 0.81rem;
                     line-height: 1;
-                    padding: 0.25rem 0.75rem;
+                    padding: 0.2rem 0.64rem;
                     box-shadow: 0 2px 0 rgba(0,0,0,0.14);
                     text-align: center;
                 }
                 .locator-footer-logos {
-                    width: 106px;
+                    width: 122px;
                 }
                 .locator-footer-arches {
                     width: 100%;
@@ -383,10 +396,12 @@ const StoreLocator = ({ onBack }) => {
                     justify-content: center;
                     overflow: hidden;
                     margin-bottom: -2px;
+                    position: relative;
+                    z-index: 1;
                 }
                 .locator-footer-arches-img {
-                    width: 100%;
-                    max-width: 400px;
+                    width: var(--locator-gold-line-w);
+                    max-width: none;
                     transform: rotate(180deg);
                     display: block;
                 }
@@ -401,6 +416,8 @@ const StoreLocator = ({ onBack }) => {
                     font-family: 'Inter', sans-serif;
                     font-weight: 700;
                     padding: 2px 6px;
+                    position: relative;
+                    z-index: 2;
                 }
                 @media (min-width: 1024px) {
                     .locator-container {

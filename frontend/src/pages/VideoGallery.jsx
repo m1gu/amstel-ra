@@ -219,7 +219,7 @@ const VideoGallery = ({ onBack }) => {
                             <img
                                 src={titulo3}
                                 alt="Selecciona el año y revive las emociones del campeonato"
-                                className="gallery-title-image"
+                                className="gallery-title-image gallery-title-image-player"
                             />
                         </div>
 
@@ -338,6 +338,10 @@ const VideoGallery = ({ onBack }) => {
 
             <style>{`
                 .gallery-screen {
+                    --gallery-gap: clamp(10px, 1.8vh, 15px);
+                    --gallery-gold-line-w: 80vw;
+                    --gallery-gold-line-h: calc(var(--gallery-gold-line-w) * 121 / 735);
+                    --gallery-title-target-w: 80vw;
                     position: fixed;
                     inset: 0;
                     width: 100vw;
@@ -369,7 +373,8 @@ const VideoGallery = ({ onBack }) => {
                 }
                 .gallery-lineas-superior {
                     z-index: 12;
-                    max-width: 234px;
+                    width: var(--gallery-gold-line-w);
+                    max-width: none;
                 }
                 .gallery-container {
                     width: min(100%, 400px);
@@ -377,7 +382,10 @@ const VideoGallery = ({ onBack }) => {
                     height: 100dvh;
                     min-height: 100dvh;
                     margin: 0 auto;
-                    padding: calc(2.1rem + 15px) 0.95rem 100px;
+                    padding:
+                        calc(env(safe-area-inset-top, 0px) + var(--gallery-gold-line-h) + var(--gallery-gap))
+                        0.95rem
+                        100px;
                     align-items: center;
                     justify-content: flex-start;
                     text-align: center;
@@ -399,11 +407,14 @@ const VideoGallery = ({ onBack }) => {
                 }
                 .gallery-header {
                     width: 100%;
-                    margin-bottom: 0.8rem;
+                    margin-bottom: 0.65rem;
                 }
                 .gallery-title-image {
-                    width: clamp(144px, 43.2vw, 200px);
-                    transform: translateY(15px);
+                    width: min(var(--gallery-title-target-w), 280px);
+                    transform: none;
+                }
+                .gallery-title-image-player {
+                    transform: translateY(clamp(10px, 1.8vh, 15px));
                 }
                 .gallery-years-wrap {
                     width: 100%;
@@ -676,10 +687,10 @@ const VideoGallery = ({ onBack }) => {
                     margin-bottom: -12px;
                 }
                 .gallery-footer-logos {
-                    width: 106px;
+                    width: 127px;
                 }
                 .gallery-footer-logos-player {
-                    width: 95px;
+                    width: 125px;
                     transform: translateY(-15px);
                 }
                 .gallery-footer-arches {
@@ -688,10 +699,12 @@ const VideoGallery = ({ onBack }) => {
                     justify-content: center;
                     overflow: hidden;
                     margin-bottom: -2px;
+                    position: relative;
+                    z-index: 1;
                 }
                 .gallery-footer-arches-img {
-                    width: 100%;
-                    max-width: 400px;
+                    width: 80vw;
+                    max-width: none;
                     transform: rotate(180deg);
                     display: block;
                 }
@@ -706,6 +719,8 @@ const VideoGallery = ({ onBack }) => {
                     font-family: 'Inter', sans-serif;
                     font-weight: 700;
                     padding: 2px 6px;
+                    position: relative;
+                    z-index: 2;
                 }
                 .video-mock-controls {
                     position: absolute;
@@ -754,6 +769,37 @@ const VideoGallery = ({ onBack }) => {
                     align-items: center;
                     justify-content: center;
                     opacity: 0.85;
+                }
+                @media (min-height: 860px) and (min-width: 390px) {
+                    .gallery-phases {
+                        max-width: 270px;
+                        gap: 13px;
+                        margin-top: 0.35rem;
+                    }
+                    .phase-accordion-gallery {
+                        font-size: clamp(11px, 1.65vh, 14px);
+                        min-height: 14px;
+                        letter-spacing: 0.03em;
+                    }
+                }
+                @media (max-width: 390px) and (max-height: 740px) {
+                    .gallery-player-related {
+                        margin-top: 0.35rem;
+                        margin-bottom: 0.5rem;
+                        padding-top: 0.1rem;
+                    }
+                    .gallery-related-rail {
+                        gap: 0.4rem;
+                        padding: 0 0.1rem 0.15rem;
+                    }
+                    .gallery-related-card {
+                        flex: 0 0 39%;
+                        min-width: 108px;
+                        max-width: 120px;
+                    }
+                    .gallery-related-card p {
+                        font-size: 0.68rem !important;
+                    }
                 }
                 @media (min-width: 1024px) {
                     .gallery-container {
