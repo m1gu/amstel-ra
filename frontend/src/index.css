@@ -34,6 +34,7 @@
   --radius-md: 12px;
   --radius-lg: 20px;
   --container-max: 1350px;
+  --brand-split-white-60: 60%;
 }
 
 * {
@@ -472,7 +473,7 @@ input:focus {
   border: 2px solid var(--amstel-gold);
   width: clamp(160px, 56vw, 208px);
   height: clamp(38px, 5.2vh, 42px);
-  margin: 0 auto;
+  margin: 0;
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
 }
 
@@ -555,10 +556,20 @@ input:focus {
   --age-gap: clamp(10px, 1.8vh, 15px);
   --age-gold-line-w: clamp(160px, 52vw, 234px);
   --age-gold-line-h: calc(var(--age-gold-line-w) * 121 / 735);
-  --age-logos-w: clamp(110px, 37.5vw, 142px);
+  --age-title-target-w: clamp(170px, 48vw, 236px);
+  --age-overlap-max: clamp(8px, 1.2vh, 10px);
+  --age-title-top: calc(env(safe-area-inset-top, 0px) + var(--age-gold-line-h) + var(--age-gap));
+  --age-hero-w: 100vw;
+  --age-hero-h: calc(var(--age-hero-w) * 1735 / 1583);
+  --age-hero-top: calc(50svh - (var(--age-hero-h) / 2));
+  --age-hero-bottom: calc(var(--age-hero-top) + var(--age-hero-h));
+  --age-entry-overlap-max: clamp(12px, 2.6vh, 20px);
+  --age-title-max-by-overlap: calc((var(--age-hero-top) + var(--age-overlap-max) - var(--age-title-top)) * 648 / 316);
+  --age-form-top: calc(var(--age-hero-bottom) - var(--age-entry-overlap-max));
+  --age-logo-pref-w: 180px;
+  --age-logo-max-w: 200px;
   --age-central-h: calc(100vw * 814 / 1080);
-  --age-form-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--age-gold-line-h) + var(--age-gap));
-  --age-controls-scale: 1;
+  --age-form-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--age-gold-line-h));
   position: fixed;
   inset: 0;
   height: 100dvh;
@@ -613,13 +624,14 @@ input:focus {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: calc(env(safe-area-inset-top, 0px) + var(--age-gold-line-h) + var(--age-gap));
+  top: var(--age-title-top);
   z-index: 30;
   margin-top: 0;
+  transform-origin: top center;
 }
 
 .age-gate-title-image {
-  width: clamp(170px, 48vw, 236px);
+  width: min(var(--age-title-target-w), max(120px, var(--age-title-max-by-overlap)));
 }
 
 .age-gate-hero-wrap {
@@ -638,8 +650,8 @@ input:focus {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 100vw;
+  width: var(--age-hero-w);
+  max-width: var(--age-hero-w);
   object-fit: contain;
   pointer-events: none;
   z-index: 1;
@@ -651,22 +663,24 @@ input:focus {
   transform: translateX(-50%);
   z-index: 40;
   width: min(360px, calc(100% - 1rem));
-  top: calc(50% + (var(--age-central-h) / 2) + var(--age-gap));
+  top: var(--age-form-top);
   bottom: var(--age-form-bottom);
   margin-top: 0;
   padding-bottom: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  gap: clamp(8px, 1.6vh, 14px);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  row-gap: 0;
+  overflow: hidden;
 }
 
 .age-gate-entry-group {
+  position: relative;
+  left: auto;
+  top: auto;
   width: 100%;
-  margin: 0 auto;
-  transform: scale(var(--age-controls-scale));
-  transform-origin: top center;
+  margin: 0;
+  align-self: start;
+  justify-self: center;
 }
 
 .age-gate-caption {
@@ -684,7 +698,7 @@ input:focus {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: clamp(0.15rem, 0.9vw, 0.35rem);
+  gap: 0;
   width: 100%;
 }
 
@@ -702,10 +716,20 @@ input:focus {
 }
 
 .age-gate-logos {
-  position: static;
+  position: relative;
+  left: auto;
+  bottom: auto;
+  transform: none;
   display: block;
-  width: var(--age-logos-w);
+  width: min(var(--age-logo-pref-w), 100%);
+  max-width: min(var(--age-logo-max-w), 100%);
+  max-height: 100%;
+  height: auto;
+  object-fit: contain;
   margin: 0;
+  align-self: center;
+  justify-self: center;
+  z-index: 45;
 }
 
 .age-rejection-modal {
@@ -765,6 +789,20 @@ input:focus {
 /* Home Menu Screen */
 
 .home-menu-screen {
+  --home-gap: clamp(10px, 1.8vh, 15px);
+  --home-gold-line-w: clamp(160px, 52vw, 234px);
+  --home-gold-line-h: calc(var(--home-gold-line-w) * 121 / 735);
+  --home-title-target-w: clamp(150px, 40.6vw, 189px);
+  --home-overlap-max: clamp(8px, 1.2vh, 10px);
+  --home-title-top: calc(env(safe-area-inset-top, 0px) + var(--home-gold-line-h) + var(--home-gap));
+  --home-hero-w: 112vw;
+  --home-hero-h: calc(var(--home-hero-w) * 1375 / 1500);
+  --home-hero-top: calc(50svh - (var(--home-hero-h) * 0.37));
+  --home-hero-bottom: calc(var(--home-hero-top) + var(--home-hero-h));
+  --home-title-max-by-overlap: calc((var(--home-hero-top) + var(--home-overlap-max) - var(--home-title-top)) * 697 / 277);
+  --home-actions-top: calc(var(--home-hero-top) + (var(--home-hero-h) * 0.5));
+  --home-footer-reserved: clamp(96px, 15.5vh, 126px);
+  --home-actions-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--home-footer-reserved));
   position: fixed;
   inset: 0;
   width: 100vw;
@@ -776,7 +814,7 @@ input:focus {
 
 .home-menu-red-overlay {
   position: absolute;
-  top: 40%;
+  top: var(--brand-split-white-60);
   left: 0;
   right: 0;
   bottom: 0;
@@ -788,87 +826,101 @@ input:focus {
 
 .home-menu-screen .lineas-superior {
   z-index: 10;
-  max-width: 234px;
+  width: var(--home-gold-line-w);
+  max-width: none;
 }
 
 .home-menu-screen .lineas-central {
-  z-index: 10;
-  width: 100%;
-  max-width: 430px;
-  top: 40%;
+  z-index: 8;
+  width: 100vw;
+  min-width: 100vw;
+  max-width: 100vw;
+  top: 50%;
 }
 
 .home-menu-container {
-  width: min(100%, 400px);
+  width: 100%;
   max-width: 100%;
   height: 100svh;
   min-height: 100svh;
   margin: 0 auto;
-  padding:
-    calc(env(safe-area-inset-top, 0px) + 0.75rem)
-    0.95rem
-    calc(env(safe-area-inset-bottom, 0px) + 6.25rem);
-  justify-content: flex-start;
-  align-items: center;
+  display: block;
+  padding: 0;
   text-align: center;
-  gap: clamp(0.2rem, 0.8vh, 0.4rem);
+  position: relative;
+  z-index: 20;
   overflow: hidden;
 }
 
 .home-menu-title-wrap {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: var(--home-title-top);
   z-index: 30;
-  margin-top: clamp(2rem, 7.5svh, 3.2rem);
+  margin-top: 0;
+  transform-origin: top center;
 }
 
 .home-menu-title-image {
-  width: clamp(133px, 40.6vw, 189px);
+  width: min(var(--home-title-target-w), max(120px, var(--home-title-max-by-overlap)));
 }
 
 .home-menu-hero-wrap {
-  position: relative;
-  width: 100%;
-  height: clamp(270px, 41svh, 380px);
-  min-height: clamp(270px, 41svh, 380px);
-  z-index: 20;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  width: 100vw;
+  height: 100svh;
+  min-height: 100svh;
+  z-index: 24;
 }
 
 .home-menu-hero {
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -46%);
-  width: clamp(560px, 175vw, 980px);
-  max-width: none;
+  transform: translate(-50%, -37%);
+  width: var(--home-hero-w);
+  max-width: var(--home-hero-w);
   object-fit: contain;
   pointer-events: none;
 }
 
 .home-menu-actions {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 40;
-  width: 100%;
-  max-width: 340px;
-  margin-top: clamp(-2.4rem, -5svh, -1rem);
-  margin-left: auto;
-  margin-right: auto;
+  width: min(50vw, 360px);
+  top: var(--home-actions-top);
+  bottom: var(--home-actions-bottom);
+  margin: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(0.55rem, 1.6vh, 0.85rem);
-  transform: none;
+  justify-content: center;
+  gap: clamp(0.4rem, 1.3vh, 0.75rem);
+  overflow: hidden;
+  container-type: size;
 }
 
 .home-menu-btn {
-  width: min(296px, 87vw);
-  min-height: clamp(44px, 6vh, 48px);
-  padding: 0.55rem 0.9rem;
+  width: 100%;
+  min-height: clamp(32px, 24cqh, 48px);
+  padding: 4px clamp(0.55rem, 8cqh, 0.9rem);
   border-radius: 999px;
   border: 2px solid var(--amstel-gold);
   background: #fff;
   color: var(--amstel-red);
   font-family: 'Bebas Neue', 'Outfit', sans-serif;
-  font-size: clamp(1rem, 4.8vw, 1.45rem);
+  font-size: clamp(0.56rem, 5.6cqw, 0.8rem);
   line-height: 1;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18);
 }
 
@@ -900,7 +952,28 @@ input:focus {
 
 @media (max-width: 1024px) {
   .age-gate-screen {
-    --age-controls-scale: 0.6;
+    --age-gold-line-w: 80vw;
+    --age-title-target-w: 80vw;
+  }
+
+  .home-menu-screen {
+    --home-gold-line-w: 80vw;
+    --home-title-target-w: 80vw;
+    --home-hero-w: 200vw;
+  }
+
+  .age-gate-container {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .home-menu-container {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .brand-bg {
@@ -945,15 +1018,6 @@ input:focus {
     padding-right: 0.9rem;
   }
 
-  .home-menu-hero-wrap {
-    height: clamp(300px, 36vw, 365px);
-    min-height: clamp(300px, 36vw, 365px);
-  }
-
-  .home-menu-hero {
-    width: clamp(620px, 75vw, 780px);
-  }
-
   body {
     background-color: #f0f0f0;
   }
@@ -962,60 +1026,113 @@ input:focus {
 @media (max-height: 740px) {
   .age-gate-screen {
     --age-gap: clamp(8px, 1.2vh, 12px);
-    --age-gold-line-w: clamp(145px, 48vw, 210px);
-    --age-logos-w: clamp(102px, 35vw, 134px);
-    --age-controls-scale: 0.6;
+    --age-gold-line-w: 80vw;
+  }
+
+  .home-menu-screen {
+    --home-gap: clamp(8px, 1.2vh, 12px);
+    --home-gold-line-w: 80vw;
+    --home-footer-reserved: clamp(94px, 16vh, 132px);
   }
 
   .age-gate-hero-wrap {
     height: 100svh;
     min-height: 100svh;
   }
+}
 
-  .home-menu-title-wrap {
-    margin-top: clamp(1.2rem, 4svh, 2rem);
+@media (max-height: 680px) and (max-width: 400px) {
+  .age-gate-screen {
+    --age-entry-overlap-max: 16px;
+    --age-logo-pref-w: 130px;
+    --age-logo-max-w: 150px;
   }
 
-  .home-menu-hero-wrap {
-    height: clamp(230px, 36svh, 300px);
-    min-height: clamp(230px, 36svh, 300px);
+  .home-menu-screen {
+    --home-hero-w: 142.857vw;
+  }
+
+  .age-gate-form-wrap {
+    width: min(270px, calc(100% - 1rem));
+  }
+
+  .age-gate-entry-group {
+    width: 46vw;
+    max-width: 170px;
+    min-width: 150px;
+    justify-self: center;
+  }
+
+  .age-gate-caption {
+    font-size: clamp(0.66rem, 2.5vw, 0.78rem);
+    margin-bottom: 0.2rem;
+  }
+
+  .age-gate-form {
+    gap: 0.15rem;
+  }
+
+  .age-gate-input-wrapper {
+    width: clamp(96px, 28vw, 118px);
+    height: clamp(26px, 3.9vh, 30px);
+    padding: 0 0.5rem;
+  }
+
+  .age-gate-input {
+    font-size: clamp(0.78rem, 2.9vw, 0.92rem);
+  }
+
+  .age-gate-submit {
+    width: clamp(60px, 18vw, 78px);
+    height: clamp(26px, 3.9vh, 30px);
+    font-size: clamp(0.72rem, 2.5vw, 0.88rem);
+    padding: 0 0.35rem;
+  }
+
+  .age-gate-logos {
+    max-height: 82%;
+  }
+
+  .home-menu-screen {
+    --home-footer-reserved: clamp(112px, 19vh, 142px);
   }
 
   .home-menu-actions {
-    margin-top: clamp(-3rem, -7svh, -1.8rem);
+    width: min(255px, calc(100% - 1rem));
+    gap: 0.35rem;
+  }
+
+  .home-menu-btn {
+    width: 50vw;
+    max-width: 205px;
+    min-height: clamp(30px, 4.5vh, 36px);
+    padding: 0.28rem 0.52rem;
+    font-size: clamp(0.68rem, 2.7vw, 0.86rem);
+    line-height: 1.02;
   }
 }
 
 @media (min-height: 900px) {
   .age-gate-screen {
     --age-gap: clamp(12px, 2vh, 18px);
-    --age-gold-line-w: clamp(175px, 54vw, 234px);
-    --age-logos-w: clamp(118px, 40vw, 150px);
-    --age-controls-scale: 0.6;
+    --age-gold-line-w: 80vw;
+  }
+
+  .home-menu-screen {
+    --home-gap: clamp(12px, 2vh, 18px);
+    --home-gold-line-w: 80vw;
+    --home-footer-reserved: clamp(100px, 14vh, 120px);
   }
 
   .age-gate-hero-wrap {
     height: 100svh;
     min-height: 100svh;
   }
-
-  .home-menu-hero-wrap {
-    height: clamp(320px, 44svh, 420px);
-    min-height: clamp(320px, 44svh, 420px);
-  }
-
-  .home-menu-actions {
-    margin-top: clamp(-1.7rem, -3.5svh, -0.9rem);
-  }
 }
 
-@media (min-aspect-ratio: 9/16) {
-  .age-gate-screen {
-    --age-logos-w: clamp(106px, 31vw, 142px);
-  }
-
-  .home-menu-hero {
-    width: clamp(520px, 145vw, 900px);
+@media (min-aspect-ratio: 9/16) and (max-width: 1024px) {
+  .home-menu-screen {
+    --home-hero-w: 200vw;
   }
 }
 
@@ -1051,8 +1168,8 @@ input:focus {
 }
 
 .gf-logo-composite {
-  width: 100%;
-  max-width: 118px;
+  width: min(34vw, 136px);
+  max-width: 136px;
   height: auto;
   object-fit: contain;
 }
@@ -1093,4 +1210,11 @@ input:focus {
 
 .home-footer {
   z-index: 90;
+}
+
+@media (max-width: 1024px) {
+  .home-footer .gf-arches {
+    width: 80vw;
+    max-width: none;
+  }
 }

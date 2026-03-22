@@ -10,7 +10,8 @@ import titulo1 from '../assets/images/titulo1.png';
 import titulo2 from '../assets/images/titulo2.png';
 import logosComposite from '../assets/images/logos.png';
 
-const headerImg = `${import.meta.env.BASE_URL}assets/images/header2.png`;
+const ageHeaderImg = `${import.meta.env.BASE_URL}assets/images/header2.png`;
+const homeHeaderImg = `${import.meta.env.BASE_URL}assets/images/header4.png`;
 
 const Landing = () => {
     const [ageVerified, setAgeVerified] = useState(sessionStorage.getItem('amstel_age_gate') === 'true');
@@ -74,7 +75,7 @@ const Landing = () => {
 
                     <div className="age-gate-hero-wrap">
                         <img
-                            src={headerImg}
+                            src={ageHeaderImg}
                             alt="Latas Amstel"
                             className="hero-image-hands age-gate-hero"
                         />
@@ -154,7 +155,7 @@ const Landing = () => {
 
                 <div className="home-menu-hero-wrap">
                     <img
-                        src={headerImg}
+                        src={homeHeaderImg}
                         alt="Latas Amstel"
                         className="hero-image-hands home-menu-hero"
                     />
