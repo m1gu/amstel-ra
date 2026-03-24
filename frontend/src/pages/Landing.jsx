@@ -11,7 +11,14 @@ import titulo2 from '../assets/images/titulo2.png';
 import logosComposite from '../assets/images/logos.png';
 
 const ageHeaderImg = `${import.meta.env.BASE_URL}assets/images/header2.png`;
+const ageDesktopHeaderImg = `${import.meta.env.BASE_URL}assets/images/pc-header1.png`;
+const ageDesktopTitleImg = `${import.meta.env.BASE_URL}assets/images/pc-titulo1.png`;
+const ageDesktopCircleImg = `${import.meta.env.BASE_URL}assets/images/pc-golden-circle.png`;
+const ageDesktopLogosImg = `${import.meta.env.BASE_URL}assets/images/pc-logos1.png`;
+const ageDesktopLineLeftImg = `${import.meta.env.BASE_URL}assets/images/pc-lineadorada-izquierda.png`;
+const ageDesktopLineRightImg = `${import.meta.env.BASE_URL}assets/images/pc-lineadorada-derecha.png`;
 const homeHeaderImg = `${import.meta.env.BASE_URL}assets/images/header4.png`;
+const homeDesktopHeaderImg = `${import.meta.env.BASE_URL}assets/images/pc-header2.png`;
 
 const Landing = () => {
     const [ageVerified, setAgeVerified] = useState(sessionStorage.getItem('amstel_age_gate') === 'true');
@@ -60,25 +67,34 @@ const Landing = () => {
             <div className="brand-bg age-gate-screen">
                 <img src={lineasSuperior} alt="" className="lineas-superior" />
                 <img src={lineasCentral} alt="" className="lineas-central" />
+                <img src={ageDesktopCircleImg} alt="" className="lineas-central-desktop" />
                 <img src={lineasSuperior} alt="" className="lineas-inferior" />
+                <img src={ageDesktopLineLeftImg} alt="" className="age-gate-side-line age-gate-side-line-left" />
+                <img src={ageDesktopLineRightImg} alt="" className="age-gate-side-line age-gate-side-line-right" />
 
                 <div className="age-gate-red-overlay"></div>
 
                 <div className="landing-container age-gate-container">
                     <div className="age-gate-title-wrap">
-                        <img
-                            src={titulo1}
-                            alt="Todas las emociones entran en juego"
-                            className="age-gate-title-image"
-                        />
+                        <picture>
+                            <source media="(min-width: 1200px)" srcSet={ageDesktopTitleImg} />
+                            <img
+                                src={titulo1}
+                                alt="Todas las emociones entran en juego"
+                                className="age-gate-title-image"
+                            />
+                        </picture>
                     </div>
 
                     <div className="age-gate-hero-wrap">
-                        <img
-                            src={ageHeaderImg}
-                            alt="Latas Amstel"
-                            className="hero-image-hands age-gate-hero"
-                        />
+                        <picture>
+                            <source media="(min-width: 1200px)" srcSet={ageDesktopHeaderImg} />
+                            <img
+                                src={ageHeaderImg}
+                                alt="Latas Amstel"
+                                className="hero-image-hands age-gate-hero"
+                            />
+                        </picture>
                     </div>
 
                     <div className="age-gate-form-wrap">
@@ -115,9 +131,15 @@ const Landing = () => {
                         <img
                             src={logosComposite}
                             alt="Conmebol Libertadores y Amstel"
-                            className="age-gate-logos"
+                            className="age-gate-logos age-gate-logos-mobile"
                         />
                     </div>
+
+                    <img
+                        src={ageDesktopLogosImg}
+                        alt="Conmebol Libertadores y Amstel"
+                        className="age-gate-logos-desktop"
+                    />
 
                     {showRejection && (
                         <div style={overlayStyle}>
@@ -133,6 +155,10 @@ const Landing = () => {
                         </div>
                     )}
                 </div>
+
+                <div className="age-gate-legal">
+                    © ADVERTENCIA: EL CONSUMO EXCESIVO DE ALCOHOL PUEDE PERJUDICAR SU SALUD. MINISTERIO DE SALUD PUBLICA DEL ECUADOR.
+                </div>
             </div>
         );
     }
@@ -141,6 +167,9 @@ const Landing = () => {
         <div className="brand-bg home-menu-screen">
             <img src={lineasSuperior} alt="" className="lineas-superior" />
             <img src={lineasCentral} alt="" className="lineas-central" />
+            <img src={ageDesktopCircleImg} alt="" className="home-lineas-central-desktop" />
+            <img src={ageDesktopLineLeftImg} alt="" className="home-side-line home-side-line-left" />
+            <img src={ageDesktopLineRightImg} alt="" className="home-side-line home-side-line-right" />
 
             <div className="home-menu-red-overlay"></div>
 
@@ -151,14 +180,22 @@ const Landing = () => {
                         alt="Interactúa y revive las emociones de la Conmebol Libertadores"
                         className="home-menu-title-image"
                     />
+                    <h1 className="home-menu-title-text">
+                        INTERACTÚA Y REVIVE LAS EMOCIONES DE LA
+                        <br />
+                        COPA CONMEBOL LIBERTADORES
+                    </h1>
                 </div>
 
                 <div className="home-menu-hero-wrap">
-                    <img
-                        src={homeHeaderImg}
-                        alt="Latas Amstel"
-                        className="hero-image-hands home-menu-hero"
-                    />
+                    <picture>
+                        <source media="(min-width: 1200px)" srcSet={homeDesktopHeaderImg} />
+                        <img
+                            src={homeHeaderImg}
+                            alt="Latas Amstel"
+                            className="hero-image-hands home-menu-hero"
+                        />
+                    </picture>
                 </div>
 
                 <div className="home-menu-actions">
@@ -172,9 +209,18 @@ const Landing = () => {
                         ¿Dónde consigo el vaso?
                     </button>
                 </div>
+
+                <img
+                    src={ageDesktopLogosImg}
+                    alt="Conmebol Libertadores y Amstel"
+                    className="home-menu-logos-desktop"
+                />
             </div>
 
             <GlobalFooter className="home-footer" />
+            <div className="home-desktop-legal">
+                © ADVERTENCIA: EL CONSUMO EXCESIVO DE ALCOHOL PUEDE PERJUDICAR SU SALUD. MINISTERIO DE SALUD PUBLICA DEL ECUADOR.
+            </div>
         </div>
     );
 
