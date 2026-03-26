@@ -112,7 +112,7 @@ const VideoGallery = ({ onBack }) => {
                         className="gallery-title-image"
                     />
                     <h2 className="gallery-title-text-desktop">
-                        SELECCIONA EL AÑO Y REVIVE LAS EMOCIONES DEL AÑO
+                        SELECCIONA EL AÑO Y REVIVE LAS EMOCIONES DEL CAMPEONATO
                     </h2>
                 </div>
 
@@ -244,7 +244,7 @@ const VideoGallery = ({ onBack }) => {
                                 className="gallery-title-image gallery-title-image-player"
                             />
                             <h2 className="gallery-player-title-text">
-                                SELECCIONA EL AÑO Y REVISE LAS EMOCIONES DEL AÑO
+                                SELECCIONA EL AÑO Y REVIVE LAS EMOCIONES DEL CAMPEONATO
                             </h2>
                         </div>
 
@@ -859,6 +859,7 @@ const VideoGallery = ({ onBack }) => {
                     }
                     .gallery-screen .gallery-red-overlay {
                         top: 50%;
+                        background: transparent;
                     }
                     .gallery-screen .gallery-lineas-superior,
                     .gallery-screen .gallery-lineas-central-desktop {
@@ -877,7 +878,7 @@ const VideoGallery = ({ onBack }) => {
                         overflow: hidden;
                     }
                     .gallery-screen .gallery-header {
-                        margin-bottom: 0.45rem;
+                        margin-bottom: 0;
                     }
                     .gallery-screen .gallery-title-image {
                         display: none;
@@ -894,11 +895,13 @@ const VideoGallery = ({ onBack }) => {
                         font-size: clamp(2.15rem, 2.7vw, 3.5rem);
                     }
                     .gallery-screen .gallery-years-wrap {
-                        padding: 0.35rem 0 0.2rem;
-                        margin-bottom: 0.5rem;
+                        padding: 0;
+                        margin-top: 30px;
+                        margin-bottom: 20px;
                     }
                     .gallery-screen .gallery-years-row {
-                        width: var(--gallery-desktop-content-w);
+                        width: 35vw;
+                        max-width: 35vw;
                         margin: 0 auto;
                         justify-content: space-between;
                         gap: 0.55rem;
@@ -917,8 +920,16 @@ const VideoGallery = ({ onBack }) => {
                         padding: 0;
                     }
                     .gallery-screen .gallery-final-preview {
-                        width: var(--gallery-desktop-content-w);
-                        margin: 0 auto 0.55rem;
+                        position: relative;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        width: 50vw;
+                        max-width: 50vw;
+                        margin: 0 0 20px 0;
+                    }
+                    .gallery-screen .gallery-final-preview .gallery-thumb-container {
+                        width: 100%;
+                        margin: 0 auto;
                     }
                     .gallery-screen .gallery-phases {
                         width: var(--gallery-desktop-content-w);
@@ -940,18 +951,24 @@ const VideoGallery = ({ onBack }) => {
                         position: fixed;
                         left: clamp(46px, 7vw, 96px);
                         bottom: clamp(14px, 2.4vh, 26px);
-                        width: 164px;
-                        min-height: 58px;
-                        font-size: 2rem;
+                        width: 150px;
+                        min-width: 150px;
+                        max-width: 150px;
+                        height: 40px;
+                        min-height: 40px;
+                        max-height: 40px;
+                        font-size: 22px;
+                        white-space: nowrap;
+                        line-height: 1;
                         border-width: 3px;
-                        padding: 0.45rem 1rem;
+                        padding: 0 0.7rem;
                         z-index: 132;
                     }
                     .gallery-logos-desktop-main {
                         display: block;
                         position: absolute;
                         right: clamp(74px, 8.5vw, 164px);
-                        top: 50dvh;
+                        top: calc(50dvh - 20px);
                         transform: translateY(-50%);
                         width: clamp(170px, 15.5vw, 250px);
                         height: auto;
@@ -979,6 +996,7 @@ const VideoGallery = ({ onBack }) => {
                     }
                     .gallery-player-screen .gallery-red-overlay {
                         top: 50%;
+                        background: transparent;
                     }
                     .gallery-player-screen .gallery-lineas-superior {
                         display: none;
@@ -1011,10 +1029,10 @@ const VideoGallery = ({ onBack }) => {
                         pointer-events: none;
                     }
                     .gallery-side-line-left {
-                        left: 0;
+                        left: -25px;
                     }
                     .gallery-side-line-right {
-                        right: 0;
+                        right: -25px;
                     }
                     .gallery-player-container {
                         width: 100%;
@@ -1026,7 +1044,7 @@ const VideoGallery = ({ onBack }) => {
                         overflow: hidden;
                     }
                     .gallery-player-container .gallery-header {
-                        margin-bottom: 0.55rem;
+                        margin-bottom: 0;
                     }
                     .gallery-title-image-player {
                         display: none;
@@ -1040,14 +1058,16 @@ const VideoGallery = ({ onBack }) => {
                         text-transform: uppercase;
                         color: #111;
                         line-height: 0.95;
-                        font-size: clamp(2.25rem, 3vw, 4.1rem);
+                        font-size: clamp(2.15rem, 2.7vw, 3.5rem);
                     }
                     .gallery-player-container .gallery-years-wrap {
-                        padding: 0.4rem 0 0.2rem;
-                        margin-bottom: 0.55rem;
+                        padding: 0;
+                        margin-top: 30px;
+                        margin-bottom: 20px;
                     }
                     .gallery-player-container .gallery-years-row {
-                        width: var(--gallery-player-content-w);
+                        width: 35vw;
+                        max-width: 35vw;
                         margin: 0 auto;
                         justify-content: space-between;
                         gap: 0.55rem;
@@ -1055,7 +1075,7 @@ const VideoGallery = ({ onBack }) => {
                     .gallery-player-container .year-btn {
                         min-width: 0;
                         flex: 1 1 0;
-                        font-size: clamp(1.25rem, 1.15vw, 1.55rem);
+                        font-size: clamp(1.2rem, 1.1vw, 1.5rem);
                         padding: 0.38rem 0.5rem;
                         border-width: 3px;
                     }
@@ -1077,6 +1097,15 @@ const VideoGallery = ({ onBack }) => {
                         transform: translate(-50%, -50%);
                         z-index: 34;
                     }
+                    .gallery-player-main:has(.gallery-scoreboard) .gallery-player-video-wrap {
+                        position: relative;
+                        top: auto;
+                        left: auto;
+                        transform: none;
+                        width: 50vw;
+                        max-width: 50vw;
+                        margin: 0 0 20px 0;
+                    }
                     .gallery-player-video-wrap video,
                     .gallery-player-video-wrap iframe {
                         width: 100% !important;
@@ -1092,35 +1121,54 @@ const VideoGallery = ({ onBack }) => {
                         transform: translateX(-50%);
                         width: min(100%, 860px);
                     }
+                    .gallery-player-main:has(.gallery-scoreboard) .gallery-scoreboard {
+                        position: relative;
+                        left: auto;
+                        top: auto;
+                        transform: none;
+                        width: 50vw;
+                        max-width: 50vw;
+                        margin: 0 auto;
+                    }
                     .gallery-player-main:has(.gallery-player-related) .gallery-player-video-wrap {
-                        position: fixed;
-                        left: 50%;
-                        top: 50dvh;
-                        transform: translate(-50%, -50%);
-                        margin: 0;
+                        position: relative;
+                        top: auto;
+                        left: auto;
+                        transform: none;
+                        width: 50vw;
+                        max-width: 50vw;
+                        margin: 0 0 20px 0;
                         z-index: 34;
                     }
                     .gallery-player-main:has(.gallery-player-related) .gallery-player-related {
-                        position: fixed;
-                        left: 50%;
-                        top: calc(50dvh + (var(--gallery-player-video-h) / 2) + 14px);
-                        transform: translateX(-50%);
-                        width: var(--gallery-player-content-w);
-                        margin: 0;
-                        max-height: none;
-                        overflow-x: auto;
-                        overflow-y: hidden;
+                        position: relative;
+                        left: auto;
+                        top: auto;
+                        transform: none;
+                        width: 50vw;
+                        max-width: 50vw;
+                        margin: 0 auto;
+                        max-height: min(33dvh, 320px);
+                        overflow-x: hidden;
+                        overflow-y: auto;
                         z-index: 34;
+                        padding-right: 0.2rem;
                     }
                     .gallery-player-main:has(.gallery-player-related) .gallery-related-rail {
-                        width: max-content;
-                        min-width: 100%;
-                        padding: 0 0.1rem 0.15rem;
+                        display: grid;
+                        grid-template-columns: repeat(3, minmax(0, 1fr));
+                        gap: 0.9rem;
+                        width: 100%;
+                        min-width: 0;
+                        padding: 0;
                     }
                     .gallery-player-main:has(.gallery-player-related) .gallery-related-card {
-                        flex: 0 0 31%;
-                        min-width: 132px;
-                        max-width: 168px;
+                        flex: initial;
+                        min-width: 0;
+                        max-width: none;
+                    }
+                    .gallery-player-main:has(.gallery-player-related) .gallery-related-card:hover {
+                        transform: none;
                     }
                     .gallery-scoreboard-title {
                         font-size: clamp(1.5rem, 1.9vw, 2.1rem);
@@ -1181,11 +1229,17 @@ const VideoGallery = ({ onBack }) => {
                         z-index: 132;
                     }
                     .gallery-player-footer-top .btn-volver-gallery {
-                        width: 164px;
-                        min-height: 58px;
-                        font-size: 2rem;
+                        width: 150px;
+                        min-width: 150px;
+                        max-width: 150px;
+                        height: 40px;
+                        min-height: 40px;
+                        max-height: 40px;
+                        font-size: 22px;
+                        white-space: nowrap;
+                        line-height: 1;
                         border-width: 3px;
-                        padding: 0.45rem 1rem;
+                        padding: 0 0.7rem;
                     }
                     .gallery-player-footer-top .gallery-footer-logos,
                     .gallery-player-footer .gallery-footer-arches,
@@ -1196,12 +1250,12 @@ const VideoGallery = ({ onBack }) => {
                         display: block;
                         position: absolute;
                         right: clamp(74px, 8.5vw, 164px);
-                        top: 50dvh;
+                        top: calc(50dvh - 20px);
                         transform: translateY(-50%);
                         width: clamp(170px, 15.5vw, 250px);
                         height: auto;
                         object-fit: contain;
-                        z-index: 35;
+                        z-index: 18;
                         pointer-events: none;
                     }
                     .gallery-player-legal-desktop {

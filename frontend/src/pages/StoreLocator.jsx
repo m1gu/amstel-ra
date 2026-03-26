@@ -81,11 +81,7 @@ const StoreLocator = ({ onBack }) => {
             <div className="landing-container locator-container">
                 <div className="locator-header">
                     <h2 className="locator-title">
-                        Selecciona la ciudad
-                        <br />
-                        y consigue el vaso
-                        <br />
-                        conmemorativo
+                        SELECCIONA LA CIUDAD Y CONSIGUE EL VASO CONMEMORATIVO
                     </h2>
 
                     <div className="locator-search-wrap">
@@ -242,6 +238,7 @@ const StoreLocator = ({ onBack }) => {
                     margin-left: auto;
                     margin-right: auto;
                     margin-bottom: 0;
+                    text-align: center;
                 }
                 .locator-search-wrap {
                     position: relative;
@@ -400,19 +397,24 @@ const StoreLocator = ({ onBack }) => {
                     transform: translateY(15px);
                     margin-bottom: -12px;
                 }
-                .locator-back-btn {
-                    width: 98px;
-                    min-height: 29px;
-                    border-radius: 999px;
-                    border: 2px solid var(--amstel-gold);
+                .btn-volver-gallery {
                     background: #fff;
                     color: var(--amstel-red);
+                    border: 2px solid var(--amstel-gold);
+                    padding: 0.2rem 0.64rem;
+                    border-radius: 999px;
                     font-family: 'Bebas Neue', sans-serif;
+                    font-weight: 400;
                     font-size: 0.81rem;
                     line-height: 1;
-                    padding: 0.2rem 0.64rem;
                     box-shadow: 0 2px 0 rgba(0,0,0,0.14);
+                    cursor: pointer;
+                    min-height: 29px;
+                    width: 98px;
                     text-align: center;
+                }
+                .locator-back-btn {
+                    width: 98px;
                 }
                 .locator-footer-logos {
                     width: 122px;
@@ -459,6 +461,7 @@ const StoreLocator = ({ onBack }) => {
                     }
                     .locator-red-overlay {
                         top: 50%;
+                        background: transparent;
                     }
                     .locator-lineas-superior {
                         display: none;
@@ -474,10 +477,10 @@ const StoreLocator = ({ onBack }) => {
                         pointer-events: none;
                     }
                     .locator-side-line-left {
-                        left: 0;
+                        left: -25px;
                     }
                     .locator-side-line-right {
-                        right: 0;
+                        right: -25px;
                     }
                     .locator-container {
                         width: 100%;
@@ -494,17 +497,21 @@ const StoreLocator = ({ onBack }) => {
                         left: 50%;
                         top: clamp(34px, 5.5vh, 68px);
                         transform: translateX(-50%);
-                        width: min(92vw, 1050px);
+                        width: 75vw;
+                        max-width: 75vw;
                         z-index: 40;
                     }
                     .locator-title {
-                        width: min(92vw, 1050px);
+                        width: 100%;
+                        max-width: 100%;
                         font-size: clamp(2.2rem, 2.9vw, 4rem);
                         line-height: 0.95;
+                        white-space: nowrap;
+                        text-align: center;
                     }
                     .locator-search-wrap {
                         width: var(--locator-desktop-content-w);
-                        margin-top: 1.05rem;
+                        margin-top: 30px;
                     }
                     .locator-search-input-shell {
                         border-width: 3px;
@@ -586,26 +593,24 @@ const StoreLocator = ({ onBack }) => {
                         position: fixed;
                         left: clamp(46px, 7vw, 96px);
                         bottom: clamp(14px, 2.4vh, 26px);
-                        border-radius: 999px;
-                        border: 3px solid var(--amstel-gold);
-                        background: #fff;
-                        color: var(--amstel-red);
-                        font-family: 'Bebas Neue', sans-serif;
-                        width: 164px;
-                        min-height: 58px;
-                        font-size: 2rem;
+                        width: 150px;
+                        min-width: 150px;
+                        max-width: 150px;
+                        height: 40px;
+                        min-height: 40px;
+                        max-height: 40px;
+                        font-size: 22px;
+                        white-space: nowrap;
                         line-height: 1;
-                        padding: 0.45rem 1rem;
-                        box-shadow: 0 2px 0 rgba(0,0,0,0.14);
-                        text-align: center;
-                        cursor: pointer;
+                        border-width: 3px;
+                        padding: 0 0.7rem;
                         z-index: 132;
                     }
                     .locator-logos-desktop {
                         display: block;
                         position: absolute;
-                        right: clamp(74px, 8.5vw, 164px);
-                        top: 50dvh;
+                        right: clamp(70px, 8.4vw, 160px);
+                        top: calc(50dvh - 20px);
                         transform: translateY(-50%);
                         width: clamp(170px, 15.5vw, 250px);
                         height: auto;
