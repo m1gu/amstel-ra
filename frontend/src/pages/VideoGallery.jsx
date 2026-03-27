@@ -18,6 +18,37 @@ const pcSideLineLeftImg = `${import.meta.env.BASE_URL}assets/images/pc-lineadora
 const pcSideLineRightImg = `${import.meta.env.BASE_URL}assets/images/pc-lineadorada-derecha.png`;
 const pcLogosImg = `${import.meta.env.BASE_URL}assets/images/pc-logos1.png`;
 
+const PHASE_ORDER = ['Fase de Grupos', 'Octavos', 'Cuartos', 'Semis', 'Final'];
+
+const normalizePhaseName = (name) => {
+    const rawName = String(name ?? '').trim();
+    if (!rawName || rawName === '0') {
+        return 'Próximos a cargarse';
+    }
+
+    const key = rawName
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+
+    if (key.includes('grupo')) return 'Fase de Grupos';
+    if (key.includes('octavo')) return 'Octavos';
+    if (key.includes('cuarto')) return 'Cuartos';
+    if (key.includes('semi')) return 'Semis';
+    if (key.includes('final')) return 'Final';
+
+    return rawName;
+};
+
+const isRenderableVideo = (video) => {
+    if (!video || typeof video !== 'object') return false;
+
+    const title = String(video.title ?? '').trim();
+    const videoUrl = String(video.video_url ?? '').trim();
+
+    return Boolean(video.id && title && title !== '0' && videoUrl);
+};
+
 const VideoGallery = ({ onBack }) => {
     const [years, setYears] = useState([]);
     const [selectedYear, setSelectedYear] = useState(null);
@@ -53,7 +84,7 @@ const VideoGallery = ({ onBack }) => {
     const fetchYears = async () => {
         try {
             const resp = await api.get('/tournaments/years');
-            const data = resp.data;
+            const data = [...resp.data].sort((a, b) => a.year - b.year);
             setYears(data);
             if (data.length > 0) {
                 const defaultYear = data.find(y => y.year === 2025) || data[0];
@@ -71,7 +102,19 @@ const VideoGallery = ({ onBack }) => {
         setSelectedVideo(null);
         try {
             const phasesResp = await api.get(`/tournaments/${year.id}/phases`);
-            setPhases(phasesResp.data);
+            const phasesByName = new Map(
+                phasesResp.data
+                    .map((phase) => ({
+                        ...phase,
+                        name: normalizePhaseName(phase.name),
+                    }))
+                    .filter((phase) => PHASE_ORDER.includes(phase.name))
+                    .map((phase) => [phase.name, phase])
+            );
+
+            const normalizedPhases = PHASE_ORDER.map((phaseName) => phasesByName.get(phaseName)).filter(Boolean);
+
+            setPhases(normalizedPhases);
 
             const finalResp = await api.get(`/tournaments/${year.id}/final`);
             setFinalData(finalResp.data);
@@ -87,15 +130,24 @@ const VideoGallery = ({ onBack }) => {
             return;
         }
         setExpandedPhase(phase);
-        if (!phase.is_unlocked) return;
 
         try {
             const resp = await api.get(`/tournaments/phases/${phase.slug}/videos`);
-            setVideos(resp.data);
+            const normalizedVideos = Array.isArray(resp.data)
+                ? resp.data.filter(isRenderableVideo)
+                : [];
+            setVideos(normalizedVideos);
         } catch (err) {
             console.error(err);
         }
     };
+
+    const visiblePhases = phases
+        .map((phase) => ({
+            ...phase,
+            name: normalizePhaseName(phase.name),
+        }))
+        .filter((phase) => PHASE_ORDER.includes(phase.name));
 
     return (
         <div className="brand-bg gallery-screen">
@@ -167,17 +219,16 @@ const VideoGallery = ({ onBack }) => {
                         )}
 
                         <div className="gallery-phases">
-                            {phases.map(phase => (
+                            {visiblePhases.map(phase => (
                                 <div key={phase.id}>
                                     <button
                                         className={`phase-accordion-gallery ${expandedPhase?.id === phase.id ? 'expanded' : ''}`}
                                         onClick={() => togglePhase(phase)}
-                                        style={{ opacity: phase.is_unlocked ? 1 : 0.5 }}
                                     >
                                         <span>{phase.name}</span>
                                     </button>
 
-                                    {expandedPhase?.id === phase.id && phase.is_unlocked && (
+                                    {expandedPhase?.id === phase.id && (
                                         <div className="video-grid gallery-video-grid">
                                             {videos.length > 0 ? videos.map(v => (
                                                 <div key={v.id} className="video-item" onClick={() => setSelectedVideo(v)}>
@@ -192,7 +243,7 @@ const VideoGallery = ({ onBack }) => {
                                                         <span style={{ fontSize: '0.7rem', color: 'var(--amstel-gold)' }}>{v.video_type}</span>
                                                     </div>
                                                 </div>
-                                            )) : <p className="gallery-empty">No hay videos cargados aun.</p>}
+                                            )) : <p className="gallery-empty">Próximos a cargarse</p>}
                                         </div>
                                     )}
                                 </div>
@@ -921,11 +972,11 @@ const VideoGallery = ({ onBack }) => {
                     }
                     .gallery-screen .gallery-final-preview {
                         position: relative;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        width: 50vw;
-                        max-width: 50vw;
-                        margin: 0 0 20px 0;
+                        left: auto;
+                        transform: none;
+                        width: 40vw;
+                        max-width: 40vw;
+                        margin: 0 0 20px calc(50% - 20vw);
                     }
                     .gallery-screen .gallery-final-preview .gallery-thumb-container {
                         width: 100%;
@@ -1102,9 +1153,9 @@ const VideoGallery = ({ onBack }) => {
                         top: auto;
                         left: auto;
                         transform: none;
-                        width: 50vw;
-                        max-width: 50vw;
-                        margin: 0 0 20px 0;
+                        width: 40vw;
+                        max-width: 40vw;
+                        margin: 0 auto 20px;
                     }
                     .gallery-player-video-wrap video,
                     .gallery-player-video-wrap iframe {
@@ -1135,9 +1186,9 @@ const VideoGallery = ({ onBack }) => {
                         top: auto;
                         left: auto;
                         transform: none;
-                        width: 50vw;
-                        max-width: 50vw;
-                        margin: 0 0 20px 0;
+                        width: 40vw;
+                        max-width: 40vw;
+                        margin: 0 auto 20px;
                         z-index: 34;
                     }
                     .gallery-player-main:has(.gallery-player-related) .gallery-player-related {
