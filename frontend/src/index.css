@@ -1894,8 +1894,8 @@ input:focus {
   }
 
   .home-menu-hero {
-    top: auto !important;
-    bottom: 0 !important;
+    top: var(--home-hero-top-custom) !important;
+    bottom: auto !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     width: var(--home-hero-w) !important;

@@ -8,7 +8,8 @@ export class VideoPlayer {
         this.video.setAttribute('playsinline', 'true');
         this.video.setAttribute('crossorigin', 'anonymous');
         this.video.preload = 'auto';
-        this.video.muted = true; // El autoplay suele requerir estar muteado
+        this.preferredMuted = true; // Estado deseado de mute global para este player
+        this.video.muted = this.preferredMuted;
 
         this.texture = null;
         this.isPlaying = false;
@@ -46,12 +47,16 @@ export class VideoPlayer {
 
     play(onComplete = null) {
         this.onCompleteCallback = onComplete;
-        this.video.currentTime = 0;
+        if (!this.isPlaying) this.video.currentTime = 0;
+
+        // Intentar reproducir respetando el estado de mute solicitado por la UI
+        this.video.muted = this.preferredMuted;
         this.video.play().then(() => {
             this.isPlaying = true;
             console.log("Video: Reproduciendo...");
         }).catch(err => {
             console.error("Video: Error al reproducir. Reintentando con mute...", err);
+            // Fallback de autoplay: si falla sin mute, reproducir muteado para no romper la escena.
             this.video.muted = true;
             this.video.play();
         });
@@ -68,5 +73,27 @@ export class VideoPlayer {
 
     update() {
         return this.isPlaying;
+    }
+
+    setMuted(isMuted) {
+        this.preferredMuted = isMuted;
+        this.video.muted = isMuted;
+    }
+
+    unlockAudio() {
+        const wasPlaying = !this.video.paused;
+        this.setMuted(false);
+        this.video.volume = 1;
+        const playPromise = this.video.play();
+
+        if (!wasPlaying) {
+            this.video.pause();
+            this.video.currentTime = 0;
+            this.isPlaying = false;
+        } else {
+            this.isPlaying = true;
+        }
+
+        return playPromise;
     }
 }

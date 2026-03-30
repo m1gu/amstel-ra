@@ -15,7 +15,9 @@ class App {
 
     updateProgress(percent, text) {
         if (this.progressFill) this.progressFill.style.width = percent + '%';
-        if (this.progressText) this.progressText.textContent = text;
+        if (this.progressText) {
+            this.progressText.textContent = text && text.startsWith('Error') ? text : 'Cargando...';
+        }
         if (this.progressPercent) this.progressPercent.textContent = Math.round(percent) + '%';
     }
 

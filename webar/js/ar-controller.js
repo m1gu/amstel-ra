@@ -38,6 +38,9 @@ export class ARController {
         this.mouse = null;
         // Colección de todos los CTAs activos (para detectarlos en _onCanvasClick)
         this.activeCTAs = [];
+        this.activeVideoPlayers = [];
+        this.allVideoPlayers = [];
+        this.isVideoAudioMuted = true;
     }
 
     async start(onProgress) {
@@ -120,7 +123,8 @@ export class ARController {
                 isLoading: false, // Flag para evitar cargas duplicadas simultáneas
                 timeline: new TimelineEngine(),
                 ctaList: [],
-                confettiEffects: []
+                confettiEffects: [],
+                videoPlayers: []
             });
 
             // Sticky tracking — grace period para no perder el contenido inmediatamente
@@ -152,6 +156,8 @@ export class ARController {
 
                 // Actualizar CTAs activos
                 this.activeCTAs = targetData.ctaList;
+                this.activeVideoPlayers = targetData.videoPlayers;
+                this._applyVideoAudioStateToPlayers(this.activeVideoPlayers);
 
                 // Arrancar línea de tiempo
                 targetData.timeline.start();
@@ -171,6 +177,7 @@ export class ARController {
                     document.getElementById('scan-hint').classList.remove('hidden');
                     anchor.group.visible = false;
                     this.activeCTAs = [];
+                    this.activeVideoPlayers = [];
                     targetData.timeline.stop();
                     targetData.confettiEffects.forEach(c => c.stop());
                     return;
@@ -180,6 +187,7 @@ export class ARController {
                     document.getElementById('scan-hint').classList.remove('hidden');
                     anchor.group.visible = false;
                     this.activeCTAs = [];
+                    this.activeVideoPlayers = [];
                     targetData.timeline.stop();
                     targetData.confettiEffects.forEach(c => c.stop());
                     lostTimeout = null;
@@ -284,6 +292,12 @@ export class ARController {
                 mesh.userData.link = elementConfig.url;
                 targetData.ctaList.push(mesh);
             }
+
+            if (elementConfig.type === 'video' && player) {
+                targetData.videoPlayers.push(player);
+                this.allVideoPlayers.push(player);
+                this._applyVideoAudioStateToPlayers([player]);
+            }
         }
 
         targetData.loaded = true;
@@ -364,6 +378,7 @@ export class ARController {
                 case 'video':
                     player = new VideoPlayer();
                     await player.load(assetUrl);
+                    player.setMuted(this.isVideoAudioMuted);
                     const vTx = player.getTexture();
                     if (THREE.SRGBColorSpace) vTx.colorSpace = THREE.SRGBColorSpace;
                     else if (THREE.sRGBEncoding) vTx.encoding = THREE.sRGBEncoding;
@@ -609,6 +624,7 @@ export class ARController {
     _setupUIControls() {
         const resetBtn = document.getElementById('reset-btn');
         const audioBtn = document.getElementById('audio-toggle');
+        const videoAudioBtn = document.getElementById('video-audio-unlock');
 
         if (resetBtn) {
             resetBtn.onclick = () => window.location.reload();
@@ -617,9 +633,51 @@ export class ARController {
         if (audioBtn) {
             audioBtn.onclick = () => {
                 const isMuted = this.audioManager.toggleMute();
-                audioBtn.textContent = isMuted ? '🔇' : '🔊';
+                audioBtn.textContent = isMuted ? '\uD83D\uDD07' : '\uD83D\uDD0A';
                 audioBtn.classList.toggle('muted', isMuted);
             };
         }
+
+        if (videoAudioBtn) {
+            videoAudioBtn.onclick = async () => {
+                this.isVideoAudioMuted = !this.isVideoAudioMuted;
+                await this._applyVideoAudioStateToPlayers(this.allVideoPlayers, true);
+                this._refreshVideoAudioButtonUI();
+            };
+
+            this._refreshVideoAudioButtonUI();
+        }
+    }
+
+    async _applyVideoAudioStateToPlayers(players, fromUserGesture = false) {
+        if (!players || players.length === 0) return;
+
+        for (const player of players) {
+            if (!player) continue;
+            player.setMuted(this.isVideoAudioMuted);
+
+            // Si el usuario pulsó el botón y está en modo con audio,
+            // forzamos un play() para intentar desbloquear audio del video activo.
+            if (!this.isVideoAudioMuted && fromUserGesture) {
+                try {
+                    await player.unlockAudio();
+                } catch (err) {
+                    console.warn('No se pudo activar audio del video:', err);
+                }
+            }
+        }
+    }
+
+    _refreshVideoAudioButtonUI() {
+        const videoAudioBtn = document.getElementById('video-audio-unlock');
+        if (!videoAudioBtn) return;
+
+        videoAudioBtn.classList.remove('hidden');
+        videoAudioBtn.classList.toggle('is-muted', this.isVideoAudioMuted);
+        videoAudioBtn.setAttribute(
+            'aria-label',
+            this.isVideoAudioMuted ? 'Activar audio del video' : 'Silenciar audio del video'
+        );
     }
 }
+

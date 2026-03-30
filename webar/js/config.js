@@ -8,7 +8,7 @@ export const APP_CONFIG = {
         filterBeta: 40,       // Suave — evita jittering (default 10, antes 1000)
         warmupTolerance: 3,   // Detectar rápido
         missTolerance: 10,    // Tolerante antes de perder el target
-        numberOfTargets: 4,   // Cantidad de estadios/targets en targets.mind
+        numberOfTargets: 8,   // Cantidad de targets en targets.mind
         gracePeriod: 500,     // ms de gracia antes de ocultar al perder el target (0 = sin gracia)
         visibilityCheckTime: 5 // segundos — forzar 100% visibilidad de todos los elementos después de este tiempo
     },

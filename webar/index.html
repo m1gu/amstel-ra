@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Amstel AR Demo</title>
+    <title>EL VASO DE LA HISTORIA AMSTEL</title>
     <link rel="stylesheet" href="css/styles.css">
 
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <link rel="icon" type="image/png" href="/assets/images/icon-logo-amstel.png" />
 
     <!-- MindAR (Includes its own Three.js) -->
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.4/dist/mindar-image-three.prod.js"></script>
@@ -34,25 +34,25 @@
     <div id="ui-overlay">
         <div id="loading-screen" class="overlay-screen">
             <div class="loading-content">
-                <div class="loading-logo">AMSTEL</div>
-                <p class="loading-subtitle">EXPERIENCIA AR</p>
-
                 <div class="progress-container">
                     <div class="progress-bar">
                         <div id="progress-fill" class="progress-fill"></div>
                     </div>
                     <div class="progress-info">
-                        <span id="progress-text">Inicializando...</span>
-                        <span id="progress-percent">0%</span>
+                        <span id="progress-text">Cargando...</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="scan-hint" class="overlay-screen hidden">
-            <p>Escanea la imagen de Amstel</p>
+            <p>ESCANEA LA IMAGEN DE AMSTEL</p>
             <div class="scan-frame"></div>
         </div>
+
+        <button id="video-audio-unlock" class="video-audio-btn" aria-label="Alternar audio del video">
+            &#128266;
+        </button>
 
         <div id="ui-controls" class="hidden">
             <button id="reset-btn">🔄 Reiniciar</button>
@@ -108,3 +108,4 @@
 </body>
 
 </html>
+
