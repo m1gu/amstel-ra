@@ -19,11 +19,16 @@ const pcSideLineRightImg = `${import.meta.env.BASE_URL}assets/images/pc-lineador
 const pcLogosImg = `${import.meta.env.BASE_URL}assets/images/pc-logos1.png`;
 
 const PHASE_ORDER = ['Fase de Grupos', 'Octavos', 'Cuartos', 'Semis', 'Final'];
+const getEmptyMessageForYear = (year) => (
+    Number(year) === new Date().getFullYear()
+        ? 'Próximo a subirse'
+        : 'Próximo a cargarse'
+);
 
 const normalizePhaseName = (name) => {
     const rawName = String(name ?? '').trim();
     if (!rawName || rawName === '0') {
-        return 'Próximos a cargarse';
+        return '';
     }
 
     const key = rawName
@@ -56,6 +61,7 @@ const VideoGallery = ({ onBack }) => {
     const [expandedPhase, setExpandedPhase] = useState(null);
     const [videos, setVideos] = useState([]);
     const [finalData, setFinalData] = useState(null);
+    const [featuredFinalVideo, setFeaturedFinalVideo] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedVideo, setSelectedVideo] = useState(null);
 
@@ -84,10 +90,10 @@ const VideoGallery = ({ onBack }) => {
     const fetchYears = async () => {
         try {
             const resp = await api.get('/tournaments/years');
-            const data = [...resp.data].sort((a, b) => a.year - b.year);
+            const data = [...resp.data].sort((a, b) => Number(a.year) - Number(b.year));
             setYears(data);
             if (data.length > 0) {
-                const defaultYear = data.find(y => y.year === 2025) || data[0];
+                const defaultYear = data.find(y => Number(y.year) === 2026) || data[0];
                 handleYearSelect(defaultYear);
             }
         } catch (err) {
@@ -100,6 +106,8 @@ const VideoGallery = ({ onBack }) => {
         setLoading(true);
         setExpandedPhase(null);
         setSelectedVideo(null);
+        setFinalData(null);
+        setFeaturedFinalVideo(null);
         try {
             const phasesResp = await api.get(`/tournaments/${year.id}/phases`);
             const phasesByName = new Map(
@@ -116,8 +124,27 @@ const VideoGallery = ({ onBack }) => {
 
             setPhases(normalizedPhases);
 
-            const finalResp = await api.get(`/tournaments/${year.id}/final`);
-            setFinalData(finalResp.data);
+            try {
+                const finalResp = await api.get(`/tournaments/${year.id}/final`);
+                setFinalData(finalResp.data);
+            } catch (finalErr) {
+                setFinalData(null);
+                console.error(finalErr);
+            }
+
+            const finalPhase = normalizedPhases.find((phase) => phase.name === 'Final');
+            if (finalPhase) {
+                try {
+                    const finalVideosResp = await api.get(`/tournaments/phases/${finalPhase.slug}/videos`);
+                    const normalizedFinalVideos = Array.isArray(finalVideosResp.data)
+                        ? finalVideosResp.data.filter(isRenderableVideo)
+                        : [];
+                    setFeaturedFinalVideo(normalizedFinalVideos[0] || null);
+                } catch (finalVideoErr) {
+                    setFeaturedFinalVideo(null);
+                    console.error(finalVideoErr);
+                }
+            }
         } catch (err) {
             console.error(err);
         }
@@ -148,6 +175,8 @@ const VideoGallery = ({ onBack }) => {
             name: normalizePhaseName(phase.name),
         }))
         .filter((phase) => PHASE_ORDER.includes(phase.name));
+    const emptyMessage = getEmptyMessageForYear(selectedYear?.year);
+    const hasFeaturedFinalVideo = Boolean(featuredFinalVideo);
 
     return (
         <div className="brand-bg gallery-screen">
@@ -186,34 +215,40 @@ const VideoGallery = ({ onBack }) => {
                     <div className="gallery-loading">Cargando datos...</div>
                 ) : (
                     <div className="gallery-content">
-                        {finalData && (
+                        {selectedYear && (
                             <div
-                                className="final-video-preview gallery-final-preview"
-                                onClick={() => setSelectedVideo({
-                                    id: 'final',
-                                    title: `FINAL ${selectedYear?.year}`,
-                                    video_url: import.meta.env.BASE_URL + 'assets/videos/test-video.mp4',
-                                    thumbnail_url: thumbnailPartido,
-                                    sub_phase: 'GRAN FINAL'
-                                })}
+                                className={`final-video-preview gallery-final-preview ${hasFeaturedFinalVideo ? 'is-clickable' : 'is-placeholder'}`}
+                                onClick={hasFeaturedFinalVideo ? () => setSelectedVideo({
+                                    ...featuredFinalVideo,
+                                    isFinal: true,
+                                    title: featuredFinalVideo.title || `FINAL ${selectedYear?.year}`,
+                                }) : undefined}
                             >
                                 <div className="thumb-container gallery-thumb-container">
-                                    <img src={thumbnailPartido} alt="Final Highlights" />
-                                    <div className="play-overlay gallery-play-overlay">
-                                        <div className="gallery-play-btn">
-                                            <Play size={28} fill="white" color="white" />
-                                        </div>
-                                    </div>
+                                    {hasFeaturedFinalVideo ? (
+                                        <>
+                                            <img src={featuredFinalVideo.thumbnail_url || thumbnailPartido} alt={featuredFinalVideo.title || 'Final Highlights'} />
+                                            <div className="play-overlay gallery-play-overlay">
+                                                <div className="gallery-play-btn">
+                                                    <Play size={28} fill="white" color="white" />
+                                                </div>
+                                            </div>
 
-                                    <div className="video-mock-controls">
-                                        <div className="controls-left">
-                                            <Play size={14} fill="white" />
-                                            <div style={{ marginLeft: '10px' }}><Users size={14} /></div>
+                                            <div className="video-mock-controls">
+                                                <div className="controls-left">
+                                                    <Play size={14} fill="white" />
+                                                    <div style={{ marginLeft: '10px' }}><Users size={14} /></div>
+                                                </div>
+                                                <div className="controls-right">
+                                                    <div style={{ transform: 'rotate(45deg)' }}><Play size={14} /></div>
+                                                </div>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <div className="gallery-final-placeholder">
+                                            <p className="gallery-final-placeholder-text">{emptyMessage}</p>
                                         </div>
-                                        <div className="controls-right">
-                                            <div style={{ transform: 'rotate(45deg)' }}><Play size={14} /></div>
-                                        </div>
-                                    </div>
+                                    )}
                                 </div>
                             </div>
                         )}
@@ -243,7 +278,7 @@ const VideoGallery = ({ onBack }) => {
                                                         <span style={{ fontSize: '0.7rem', color: 'var(--amstel-gold)' }}>{v.video_type}</span>
                                                     </div>
                                                 </div>
-                                            )) : <p className="gallery-empty">Próximos a cargarse</p>}
+                                            )) : <p className="gallery-empty">{emptyMessage}</p>}
                                         </div>
                                     )}
                                 </div>
@@ -339,7 +374,7 @@ const VideoGallery = ({ onBack }) => {
                                 </div>
                             </div>
 
-                            {selectedVideo?.id === 'final' && finalData && (
+                            {selectedVideo?.isFinal && finalData && (
                                 <div className="gallery-scoreboard">
                                     <h3 className="gallery-scoreboard-title">FINAL {selectedYear?.year}</h3>
 
@@ -370,7 +405,7 @@ const VideoGallery = ({ onBack }) => {
                                 </div>
                             )}
 
-                            {selectedVideo?.id !== 'final' && (
+                            {!selectedVideo?.isFinal && (
                                 <div className="gallery-player-related">
                                     <div className="gallery-related-rail">
                                         {videos.filter(vid => vid.id !== selectedVideo.id).map(v => (
@@ -639,8 +674,13 @@ const VideoGallery = ({ onBack }) => {
                     position: relative;
                     width: min(100%, 340px);
                     margin: 0 auto 1rem;
-                    cursor: pointer;
                     z-index: 20;
+                }
+                .gallery-final-preview.is-clickable {
+                    cursor: pointer;
+                }
+                .gallery-final-preview.is-placeholder {
+                    cursor: default;
                 }
                 .gallery-thumb-container {
                     border-radius: 16px;
@@ -660,6 +700,24 @@ const VideoGallery = ({ onBack }) => {
                     padding: 0.9rem;
                     border-radius: 999px;
                     display: flex;
+                }
+                .gallery-final-placeholder {
+                    width: 100%;
+                    aspect-ratio: 16 / 9;
+                    background: #000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 1rem;
+                }
+                .gallery-final-placeholder-text {
+                    margin: 0;
+                    color: #fff;
+                    font-family: 'Bebas Neue', sans-serif;
+                    font-size: 1rem;
+                    letter-spacing: 0.02em;
+                    text-transform: uppercase;
+                    text-align: center;
                 }
                 .gallery-phases {
                     max-width: 240px;

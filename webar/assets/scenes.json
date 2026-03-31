@@ -894,30 +894,6 @@
           "flagWave": true
         },
         {
-          "id": "el_1772402458697_d3ot9",
-          "type": "lottie",
-          "url": "animations/jarro-4/4-3/4-3.json",
-          "name": "4-3.json",
-          "position": [
-            0.9568046832796508,
-            -0.4817434313792851,
-            0.6989386779857738
-          ],
-          "rotation": [
-            0,
-            0,
-            0
-          ],
-          "scale": [
-            1.2,
-            1.2,
-            1.5
-          ],
-          "appearAt": 1.5,
-          "fadeInDuration": 0.5,
-          "visible": true
-        },
-        {
           "id": "el_1772402555830_ttcp4",
           "type": "lottie",
           "url": "animations/jarro-4/4-5/4-5.json",
@@ -925,7 +901,7 @@
           "position": [
             0.5188919551808738,
             -1.0233679165437342,
-            0.5439215491135687
+            0.6554789124310771
           ],
           "rotation": [
             0,
@@ -1115,6 +1091,31 @@
           "visible": true,
           "autoRotate": true,
           "autoRotateSpeed": 1
+        },
+        {
+          "id": "el_1774836247119_599gi",
+          "type": "lottie",
+          "url": "animations/jugador-trofeo/jugador-trofeo.json",
+          "name": "Nueva Animación",
+          "position": [
+            0.9542352247559083,
+            -0.4288038173218528,
+            0.640914867489661
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1.8,
+            1.2,
+            1
+          ],
+          "appearAt": 0,
+          "fadeInDuration": 0.5,
+          "visible": true,
+          "loop": true
         }
       ]
     }
