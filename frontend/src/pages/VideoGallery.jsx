@@ -349,7 +349,7 @@ const VideoGallery = ({ onBack }) => {
 
                         <div className="gallery-player-main">
                             <div className="gallery-player-video-wrap">
-                                <div className="thumb-container" style={{ borderRadius: '15px', overflow: 'hidden', border: '2px solid var(--amstel-gold)' }}>
+                                <div className="thumb-container gallery-player-frame" style={{ borderRadius: '15px', overflow: 'hidden', border: '2px solid var(--amstel-gold)' }}>
                                     {selectedVideo.video_url.includes('.mp4') ? (
                                         <video
                                             src={selectedVideo.video_url}
@@ -918,6 +918,13 @@ const VideoGallery = ({ onBack }) => {
                     height: 100%;
                     display: block;
                     border: 0;
+                }
+                .gallery-player-frame video,
+                .gallery-player-frame iframe {
+                    inset: -1px;
+                    width: calc(100% + 2px);
+                    height: calc(100% + 2px);
+                    object-fit: cover;
                 }
                 .play-overlay {
                     position: absolute;
