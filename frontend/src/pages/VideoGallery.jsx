@@ -275,7 +275,6 @@ const VideoGallery = ({ onBack }) => {
                                                     </div>
                                                     <div style={{ padding: '0.5rem' }}>
                                                         <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'white' }}>{v.title}</p>
-                                                        <span style={{ fontSize: '0.7rem', color: 'var(--amstel-gold)' }}>{v.video_type}</span>
                                                     </div>
                                                 </div>
                                             )) : <p className="gallery-empty">{emptyMessage}</p>}
@@ -353,8 +352,6 @@ const VideoGallery = ({ onBack }) => {
                                 <div className="thumb-container" style={{ borderRadius: '15px', overflow: 'hidden', border: '2px solid var(--amstel-gold)' }}>
                                     {selectedVideo.video_url.includes('.mp4') ? (
                                         <video
-                                            width="100%"
-                                            height="200"
                                             src={selectedVideo.video_url}
                                             controls
                                             autoPlay
@@ -362,8 +359,6 @@ const VideoGallery = ({ onBack }) => {
                                         />
                                     ) : (
                                         <iframe
-                                            width="100%"
-                                            height="200"
                                             src={`https://www.youtube.com/embed/${selectedVideo.video_url.includes('v=') ? selectedVideo.video_url.split('v=')[1] : 'dQw4w9WgXcQ'}`}
                                             title={selectedVideo.title}
                                             frameBorder="0"
@@ -686,10 +681,14 @@ const VideoGallery = ({ onBack }) => {
                     border-radius: 16px;
                     overflow: hidden;
                     border: 2px solid #111;
+                    aspect-ratio: 16 / 9;
+                    background: #111;
                 }
                 .gallery-thumb-container img {
                     width: 100%;
+                    height: 100%;
                     display: block;
+                    object-fit: cover;
                 }
                 .gallery-play-overlay {
                     opacity: 1;
@@ -901,11 +900,24 @@ const VideoGallery = ({ onBack }) => {
                     position: relative;
                     aspect-ratio: 16/9;
                     background: #111;
+                    overflow: hidden;
                 }
                 .thumb-container img {
+                    position: absolute;
+                    inset: 0;
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
+                    display: block;
+                }
+                .thumb-container video,
+                .thumb-container iframe {
+                    position: absolute;
+                    inset: 0;
+                    width: 100%;
+                    height: 100%;
+                    display: block;
+                    border: 0;
                 }
                 .play-overlay {
                     position: absolute;
@@ -1025,6 +1037,9 @@ const VideoGallery = ({ onBack }) => {
                     .gallery-screen .gallery-content {
                         width: var(--gallery-desktop-content-w);
                         margin: 0 auto;
+                        display: flex;
+                        flex-direction: column;
+                        min-height: 0;
                         overflow: visible;
                         padding: 0;
                     }
@@ -1045,8 +1060,18 @@ const VideoGallery = ({ onBack }) => {
                         max-width: var(--gallery-desktop-content-w);
                         margin: 0 auto;
                         gap: 9px;
-                        max-height: calc(100dvh - 520px);
+                        flex: 1 1 auto;
+                        min-height: 0;
                         overflow-y: auto;
+                        overflow-x: hidden;
+                        overscroll-behavior: contain;
+                        scrollbar-width: none;
+                        -ms-overflow-style: none;
+                    }
+                    .gallery-screen .gallery-phases::-webkit-scrollbar {
+                        width: 0;
+                        height: 0;
+                        display: none;
                     }
                     .gallery-screen .phase-accordion-gallery {
                         font-size: clamp(12px, 0.95vw, 16px);
@@ -1218,8 +1243,7 @@ const VideoGallery = ({ onBack }) => {
                     .gallery-player-video-wrap video,
                     .gallery-player-video-wrap iframe {
                         width: 100% !important;
-                        height: auto !important;
-                        aspect-ratio: 16 / 9;
+                        height: 100% !important;
                         display: block;
                     }
                     .gallery-scoreboard {
