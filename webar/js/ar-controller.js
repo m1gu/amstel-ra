@@ -6,6 +6,7 @@ import { ObjLoader } from './obj-loader.js';
 import { ConfettiEffect } from './confetti-effect.js';
 import { AudioManager } from './audio-manager.js';
 import { APP_CONFIG } from './config.js';
+import { webarTracker } from './tracker.js';
 
 export class ARController {
     constructor(containerSelector) {
@@ -133,6 +134,9 @@ export class ARController {
             anchor.onTargetFound = async () => {
                 console.log(`Target ${targetIndex} detectado`);
 
+                // Analytics: track marker detection
+                webarTracker.trackTargetDetected(targetIndex);
+
                 if (lostTimeout) {
                     clearTimeout(lostTimeout);
                     lostTimeout = null;
@@ -180,6 +184,7 @@ export class ARController {
                     this.activeVideoPlayers = [];
                     targetData.timeline.stop();
                     targetData.confettiEffects.forEach(c => c.stop());
+                    webarTracker.trackTargetLost(targetIndex);
                     return;
                 }
 
@@ -190,6 +195,7 @@ export class ARController {
                     this.activeVideoPlayers = [];
                     targetData.timeline.stop();
                     targetData.confettiEffects.forEach(c => c.stop());
+                    webarTracker.trackTargetLost(targetIndex);
                     lostTimeout = null;
                 }, grace);
             };
@@ -297,6 +303,8 @@ export class ARController {
                 targetData.videoPlayers.push(player);
                 this.allVideoPlayers.push(player);
                 this._applyVideoAudioStateToPlayers([player]);
+                // Track video play in analytics
+                webarTracker.trackVideoPlay(targetData.targetIndex, elementConfig.url);
             }
         }
 

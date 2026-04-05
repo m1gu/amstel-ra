@@ -3,6 +3,7 @@
  */
 
 import { ARController } from './ar-controller.js';
+import { webarTracker } from './tracker.js';
 
 class App {
     constructor() {
@@ -23,6 +24,10 @@ class App {
 
     async init() {
         console.log("Iniciando Amstel AR Demo...");
+
+        // Start analytics session
+        webarTracker.startSession();
+        webarTracker.setupUnloadTracking();
 
         try {
             this.updateProgress(5, 'Iniciando motor AR...');
@@ -68,6 +73,9 @@ class App {
             document.getElementById('scan-hint').classList.remove('hidden');
 
             console.log("AR iniciado correctamente");
+
+            // Track AR loaded
+            webarTracker.trackARLoad();
 
         } catch (error) {
             console.error("Error inicializando la aplicación:", error);

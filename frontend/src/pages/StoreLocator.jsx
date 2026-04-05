@@ -1,6 +1,7 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search } from 'lucide-react';
 import api from '../services/api';
+import tracker from '../services/tracker';
 
 import lineasSuperior from '../assets/images/lineas-doradas-superior.png';
 import fondoRojo from '../assets/images/fondo-rojo.png';
@@ -53,6 +54,7 @@ const StoreLocator = ({ onBack }) => {
         setSelectedCity(city);
         setSuggestions([]);
         setLoading(true);
+        tracker.track('store_search', { city });
         try {
             const resp = await api.get(`/locations?city=${city}`);
             setLocations(resp.data);

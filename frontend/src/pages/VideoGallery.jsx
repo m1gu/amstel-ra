@@ -1,6 +1,7 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Play, Users } from 'lucide-react';
 import api from '../services/api';
+import tracker from '../services/tracker';
 
 import lineasSuperior from '../assets/images/lineas-doradas-superior.png';
 import titulo3 from '../assets/images/titulo3.png';
@@ -64,6 +65,19 @@ const VideoGallery = ({ onBack }) => {
     const [featuredFinalVideo, setFeaturedFinalVideo] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedVideo, setSelectedVideo] = useState(null);
+
+    // Wrap setSelectedVideo with tracking
+    const handleVideoSelect = (video) => {
+        setSelectedVideo(video);
+        if (video) {
+            tracker.track('tournament_video_play', {
+                video_title: video.title || 'Sin título',
+                video_id: video.id,
+                year: selectedYear?.year,
+                is_final: !!video.isFinal
+            });
+        }
+    };
 
     useEffect(() => {
         if (selectedVideo) {
@@ -218,7 +232,7 @@ const VideoGallery = ({ onBack }) => {
                         {selectedYear && (
                             <div
                                 className={`final-video-preview gallery-final-preview ${hasFeaturedFinalVideo ? 'is-clickable' : 'is-placeholder'}`}
-                                onClick={hasFeaturedFinalVideo ? () => setSelectedVideo({
+                                onClick={hasFeaturedFinalVideo ? () => handleVideoSelect({
                                     ...featuredFinalVideo,
                                     isFinal: true,
                                     title: featuredFinalVideo.title || `FINAL ${selectedYear?.year}`,
@@ -266,7 +280,7 @@ const VideoGallery = ({ onBack }) => {
                                     {expandedPhase?.id === phase.id && (
                                         <div className="video-grid gallery-video-grid">
                                             {videos.length > 0 ? videos.map(v => (
-                                                <div key={v.id} className="video-item" onClick={() => setSelectedVideo(v)}>
+                                                <div key={v.id} className="video-item" onClick={() => handleVideoSelect(v)}>
                                                     <div className="thumb-container">
                                                         <img src={v.thumbnail_url || '/assets/images/thumbnail-generic.jpg'} alt={v.title} />
                                                         <div className="play-overlay">
@@ -404,7 +418,7 @@ const VideoGallery = ({ onBack }) => {
                                 <div className="gallery-player-related">
                                     <div className="gallery-related-rail">
                                         {videos.filter(vid => vid.id !== selectedVideo.id).map(v => (
-                                            <div key={v.id} className="video-item gallery-related-card" onClick={() => setSelectedVideo(v)}>
+                                            <div key={v.id} className="video-item gallery-related-card" onClick={() => handleVideoSelect(v)}>
                                                 <div className="thumb-container">
                                                     <img src={v.thumb_url || v.thumbnail_url || '/assets/images/thumbnail-generic.jpg'} alt={v.title} />
                                                     <div className="play-overlay">

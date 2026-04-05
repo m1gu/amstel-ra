@@ -20,17 +20,48 @@ class EventController
     {
         $data = $request->getParsedBody();
         $uuid = bin2hex(random_bytes(18)); // Simple UUID
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
+        $source = $data['source'] ?? 'web';
+        $ipAddress = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+
+        // Parsear User-Agent
+        $deviceType = $this->detectDeviceType($userAgent);
+        $browser = $this->detectBrowser($userAgent);
+        $os = $this->detectOS($userAgent);
+
+        // Geolocalización por IP (ip-api.com, gratis hasta 45 req/min)
+        $city = null;
+        $country = null;
+        try {
+            $geoUrl = "http://ip-api.com/json/{$ipAddress}?fields=status,country,city&lang=es";
+            $geoData = @file_get_contents($geoUrl);
+            if ($geoData) {
+                $geo = json_decode($geoData, true);
+                if (($geo['status'] ?? '') === 'success') {
+                    $city = $geo['city'] ?? null;
+                    $country = $geo['country'] ?? null;
+                }
+            }
+        } catch (\Exception $e) {
+            // Silenciar errores de geolocalización
+        }
 
         $stmt = $this->db->prepare("
-            INSERT INTO sessions (session_uuid, user_agent, ip_address, referrer)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO sessions (session_uuid, user_agent, ip_address, device_type, browser, os, referrer, source, city, country)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
 
         $stmt->execute([
             $uuid,
-            $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
-            $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0',
-            $data['referrer'] ?? null
+            $userAgent,
+            $ipAddress,
+            $deviceType,
+            $browser,
+            $os,
+            $data['referrer'] ?? null,
+            $source,
+            $city,
+            $country
         ]);
 
         $response->getBody()->write(json_encode(['session_uuid' => $uuid]));
@@ -73,5 +104,36 @@ class EventController
 
         $response->getBody()->write(json_encode(['success' => true]));
         return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    // --- User-Agent Parsing Helpers ---
+
+    private function detectDeviceType(string $ua): string
+    {
+        $ua = strtolower($ua);
+        if (preg_match('/tablet|ipad|playbook|silk/', $ua)) return 'tablet';
+        if (preg_match('/mobile|android|iphone|ipod|opera mini|iemobile/', $ua)) return 'mobile';
+        return 'desktop';
+    }
+
+    private function detectBrowser(string $ua): string
+    {
+        if (preg_match('/SamsungBrowser/i', $ua)) return 'Samsung Internet';
+        if (preg_match('/Edg/i', $ua)) return 'Edge';
+        if (preg_match('/OPR|Opera/i', $ua)) return 'Opera';
+        if (preg_match('/Firefox/i', $ua)) return 'Firefox';
+        if (preg_match('/CriOS|Chrome/i', $ua)) return 'Chrome';
+        if (preg_match('/Safari/i', $ua)) return 'Safari';
+        return 'Other';
+    }
+
+    private function detectOS(string $ua): string
+    {
+        if (preg_match('/Windows/i', $ua)) return 'Windows';
+        if (preg_match('/Macintosh|Mac OS/i', $ua)) return 'macOS';
+        if (preg_match('/iPhone|iPad|iPod/i', $ua)) return 'iOS';
+        if (preg_match('/Android/i', $ua)) return 'Android';
+        if (preg_match('/Linux/i', $ua)) return 'Linux';
+        return 'Other';
     }
 }

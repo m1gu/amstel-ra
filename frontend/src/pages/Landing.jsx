@@ -1,8 +1,8 @@
-// frontend/src/pages/Landing.jsx
 import React, { useEffect, useState } from 'react';
 import VideoGallery from './VideoGallery';
 import StoreLocator from './StoreLocator';
 import GlobalFooter from '../components/GlobalFooter';
+import tracker from '../services/tracker';
 
 import lineasSuperior from '../assets/images/lineas-doradas-superior.png';
 import lineasCentral from '../assets/images/lineas-doradas-central.png';
@@ -33,6 +33,20 @@ const Landing = () => {
         };
     }, [ageVerified]);
 
+    // ─── Analytics: Start session and track page_view ───
+    useEffect(() => {
+        tracker.startSession('web').then(() => {
+            tracker.track('page_view', { page: ageVerified ? 'home_menu' : 'age_gate' });
+        });
+
+        // Track session duration on unload
+        const handleUnload = () => {
+            tracker.track('page_unload', { duration_seconds: tracker.getElapsedSeconds() });
+        };
+        window.addEventListener('beforeunload', handleUnload);
+        return () => window.removeEventListener('beforeunload', handleUnload);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
     useEffect(() => {
         const isMenuView = ageVerified && view === 'menu';
         document.body.classList.toggle('home-menu-active', isMenuView);
@@ -57,8 +71,11 @@ const Landing = () => {
         if (age >= 18) {
             sessionStorage.setItem('amstel_age_gate', 'true');
             setAgeVerified(true);
+            tracker.track('age_gate_pass', { age });
+            tracker.track('page_view', { page: 'home_menu' });
         } else {
             setShowRejection(true);
+            tracker.track('age_gate_fail', { age });
         }
     };
 
@@ -199,13 +216,13 @@ const Landing = () => {
                 </div>
 
                 <div className="home-menu-actions">
-                    <button className="btn-amstel-menu home-menu-btn home-menu-btn-primary" onClick={() => window.location.href = import.meta.env.BASE_URL + 'webar/'}>
+                    <button className="btn-amstel-menu home-menu-btn home-menu-btn-primary" onClick={() => { tracker.track('page_view', { page: 'webar_launch' }); window.location.href = import.meta.env.BASE_URL + 'webar/'; }}>
                         Activa la Realidad Aumentada
                     </button>
-                    <button className="btn-amstel-menu home-menu-btn" onClick={() => setView('gallery')}>
+                    <button className="btn-amstel-menu home-menu-btn" onClick={() => { tracker.track('page_view', { page: 'video_gallery' }); setView('gallery'); }}>
                         Revive los últimos 6 campeonatos
                     </button>
-                    <button className="btn-amstel-menu home-menu-btn" onClick={() => setView('locator')}>
+                    <button className="btn-amstel-menu home-menu-btn" onClick={() => { tracker.track('page_view', { page: 'store_locator' }); setView('locator'); }}>
                         ¿Dónde consigo el vaso?
                     </button>
                 </div>

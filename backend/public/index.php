@@ -9,6 +9,7 @@ use App\Controllers\StadiumController;
 use App\Controllers\EventController;
 use App\Controllers\TournamentController;
 use App\Controllers\LocationController;
+use App\Controllers\DashboardController;
 use Tuupola\Middleware\JwtAuthentication;
 
 //require __DIR__ . '/../vendor/autoload.php';
@@ -91,14 +92,22 @@ $app->get('/api/ping', function (Request $request, Response $response) {
 });
 
 // --- RUTAS PROTEGIDAS (CMS/ADMIN) ---
-// Solo CRUD de videos
 $app->group('/api/admin', function ($group) use ($pdo) {
+    // CRUD de videos
     $tournamentController = new TournamentController($pdo);
     $group->get('/videos', [$tournamentController, 'getAdminVideos']);
     $group->get('/videos/{id}', [$tournamentController, 'getAdminVideoById']);
     $group->post('/videos', [$tournamentController, 'createVideo']);
     $group->put('/videos/{id}', [$tournamentController, 'updateVideo']);
     $group->delete('/videos/{id}', [$tournamentController, 'deleteVideo']);
+
+    // Dashboard analytics
+    $dashboardController = new DashboardController($pdo);
+    $group->get('/dashboard/stats', [$dashboardController, 'getStats']);
+    $group->get('/dashboard/sessions-chart', [$dashboardController, 'getSessionsChart']);
+    $group->get('/dashboard/events-breakdown', [$dashboardController, 'getEventsBreakdown']);
+    $group->get('/dashboard/device-distribution', [$dashboardController, 'getDeviceDistribution']);
+    $group->get('/dashboard/top-content', [$dashboardController, 'getTopContent']);
 });
 
 $app->run();
