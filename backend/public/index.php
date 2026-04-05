@@ -19,7 +19,7 @@ $app = AppFactory::create();
 // Auto-detect base path for subdirectory deployments (e.g. /amstel/api/)
 $app->setBasePath(dirname($_SERVER['SCRIPT_NAME']));
 
-// Parsear JSON del body automáticamente
+// Parsear JSON del body automaticamente
 $app->addBodyParsingMiddleware();
 
 // Error Middleware
@@ -42,7 +42,7 @@ $app->add(function ($request, $handler) {
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
 
-// Configuración de BD
+// Configuracion de BD
 //$dbConfig = require __DIR__ . '/../config/database.php';
 $dbConfig = require __DIR__ . '/config/database.php';
 $dsn = "mysql:host={$dbConfig['host']};dbname={$dbConfig['db']};charset={$dbConfig['charset']}";
@@ -61,7 +61,7 @@ $authMiddleware = new JwtAuthentication([
 ]);
 $app->add($authMiddleware);
 
-// --- RUTAS PÚBLICAS ---
+// --- RUTAS PUBLICAS ---
 
 $authController = new AuthController($pdo);
 $app->post('/api/auth/login', [$authController, 'login']);
@@ -91,34 +91,14 @@ $app->get('/api/ping', function (Request $request, Response $response) {
 });
 
 // --- RUTAS PROTEGIDAS (CMS/ADMIN) ---
-// Aquí irán las rutas CRUD que usará el panel React
+// Solo CRUD de videos
 $app->group('/api/admin', function ($group) use ($pdo) {
-    // Torneos
     $tournamentController = new TournamentController($pdo);
-    $group->post('/tournaments', [$tournamentController, 'createTournament']);
-    $group->put('/tournaments/{id}', [$tournamentController, 'updateTournament']);
-    $group->delete('/tournaments/{id}', [$tournamentController, 'deleteTournament']);
-
-    // Fases
-    $group->post('/phases', [$tournamentController, 'createPhase']);
-    $group->put('/phases/bulk-toggle', [$tournamentController, 'bulkTogglePhase']);
-    $group->put('/phases/{id}', [$tournamentController, 'updatePhase']);
-    $group->delete('/phases/{id}', [$tournamentController, 'deletePhase']);
-
-    // Videos
+    $group->get('/videos', [$tournamentController, 'getAdminVideos']);
+    $group->get('/videos/{id}', [$tournamentController, 'getAdminVideoById']);
     $group->post('/videos', [$tournamentController, 'createVideo']);
     $group->put('/videos/{id}', [$tournamentController, 'updateVideo']);
     $group->delete('/videos/{id}', [$tournamentController, 'deleteVideo']);
-
-    // Final
-    $group->post('/final', [$tournamentController, 'saveFinalData']);
-
-    // Locales
-    $locationController = new LocationController($pdo);
-    $group->post('/locations', [$locationController, 'createLocation']);
-    $group->put('/locations/{id}', [$locationController, 'updateLocation']);
-    $group->delete('/locations/{id}', [$locationController, 'deleteLocation']);
-    $group->post('/locations/bulk', [$locationController, 'bulkImport']);
 });
 
 $app->run();

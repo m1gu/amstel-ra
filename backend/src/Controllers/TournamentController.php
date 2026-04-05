@@ -29,19 +29,13 @@ class TournamentController
     }
 
     /**
-     * Obtener fases de un torneo por año
+     * Obtener fases de un torneo por id
      */
     public function getPhases(Request $request, Response $response, array $args): Response
     {
         $id = $args['id'];
 
-        $stmt = $this->db->prepare("
-            SELECT tp.* 
-            FROM tournament_phases tp
-            JOIN tournaments t ON tp.tournament_id = t.id
-            WHERE t.id = ? AND t.is_active = 1
-            ORDER BY tp.display_order ASC
-        ");
+        $stmt = $this->db->prepare("\n            SELECT tp.* \n            FROM tournament_phases tp\n            JOIN tournaments t ON tp.tournament_id = t.id\n            WHERE t.id = ? AND t.is_active = 1\n            ORDER BY tp.display_order ASC\n        ");
         $stmt->execute([$id]);
         $phases = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -50,19 +44,13 @@ class TournamentController
     }
 
     /**
-     * Obtener videos de una fase por slug
+     * Obtener videos publicos de una fase por slug
      */
     public function getVideos(Request $request, Response $response, array $args): Response
     {
         $phaseSlug = $args['slug'];
 
-        $stmt = $this->db->prepare("
-            SELECT tv.* 
-            FROM tournament_videos tv
-            JOIN tournament_phases tp ON tv.phase_id = tp.id
-            WHERE tp.slug = ? AND tv.is_active = 1
-            ORDER BY tv.display_order ASC
-        ");
+        $stmt = $this->db->prepare("\n            SELECT tv.* \n            FROM tournament_videos tv\n            JOIN tournament_phases tp ON tv.phase_id = tp.id\n            WHERE tp.slug = ? AND tv.is_active = 1\n            ORDER BY tv.display_order ASC\n        ");
         $stmt->execute([$phaseSlug]);
         $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -71,18 +59,13 @@ class TournamentController
     }
 
     /**
-     * Obtener datos de la final de un torneo por año
+     * Obtener datos de la final de un torneo por id
      */
     public function getFinalData(Request $request, Response $response, array $args): Response
     {
         $id = $args['id'];
 
-        $stmt = $this->db->prepare("
-            SELECT tf.* 
-            FROM tournament_finals tf
-            JOIN tournaments t ON tf.tournament_id = t.id
-            WHERE t.id = ?
-        ");
+        $stmt = $this->db->prepare("\n            SELECT tf.* \n            FROM tournament_finals tf\n            JOIN tournaments t ON tf.tournament_id = t.id\n            WHERE t.id = ?\n        ");
         $stmt->execute([$id]);
         $final = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -95,127 +78,68 @@ class TournamentController
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    // --- MÉTODOS ADMINISTRATIVOS ---
+    // --- METODOS ADMINISTRATIVOS (SOLO VIDEOS) ---
 
     /**
-     * Crear un nuevo torneo
+     * Listado admin de videos con metadatos de fase/torneo.
+     * Filtros opcionales por query string: year, tournament_id, phase_id.
      */
-    public function createTournament(Request $request, Response $response): Response
+    public function getAdminVideos(Request $request, Response $response): Response
     {
-        $data = $request->getParsedBody();
-        $stmt = $this->db->prepare("INSERT INTO tournaments (year, name, display_order, is_active) VALUES (?, ?, ?, ?)");
-        $stmt->execute([
-            $data['year'],
-            $data['name'],
-            $data['display_order'] ?? 0,
-            $data['is_active'] ?? 1
-        ]);
+        $queryParams = $request->getQueryParams();
 
-        $data['id'] = $this->db->lastInsertId();
-        $response->getBody()->write(json_encode($data));
-        return $response->withStatus(201)->withHeader('Content-Type', 'application/json');
-    }
+        $sql = "\n            SELECT\n                tv.*,\n                tp.name AS phase_name,\n                tp.slug AS phase_slug,\n                tp.tournament_id,\n                t.year AS tournament_year,\n                t.name AS tournament_name\n            FROM tournament_videos tv\n            JOIN tournament_phases tp ON tv.phase_id = tp.id\n            JOIN tournaments t ON tp.tournament_id = t.id\n        ";
 
-    /**
-     * Actualizar un torneo
-     */
-    public function updateTournament(Request $request, Response $response, array $args): Response
-    {
-        $id = $args['id'];
-        $data = $request->getParsedBody();
-        $stmt = $this->db->prepare("UPDATE tournaments SET year = ?, name = ?, display_order = ?, is_active = ? WHERE id = ?");
-        $stmt->execute([
-            $data['year'],
-            $data['name'],
-            $data['display_order'],
-            $data['is_active'],
-            $id
-        ]);
+        $conditions = [];
+        $values = [];
 
-        return $response->withStatus(204);
-    }
-
-    /**
-     * Eliminar un torneo
-     */
-    public function deleteTournament(Request $request, Response $response, array $args): Response
-    {
-        $id = $args['id'];
-        $stmt = $this->db->prepare("DELETE FROM tournaments WHERE id = ?");
-        $stmt->execute([$id]);
-        return $response->withStatus(204);
-    }
-
-    /**
-     * Crear una nueva fase
-     */
-    public function createPhase(Request $request, Response $response): Response
-    {
-        $data = $request->getParsedBody();
-        $stmt = $this->db->prepare("INSERT INTO tournament_phases (tournament_id, name, slug, phase_type, has_sub_phases, display_order, is_unlocked) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([
-            $data['tournament_id'],
-            $data['name'],
-            $data['slug'],
-            $data['phase_type'] ?? 'knockout',
-            $data['has_sub_phases'] ?? 0,
-            $data['display_order'] ?? 0,
-            $data['is_unlocked'] ?? 1
-        ]);
-
-        $data['id'] = $this->db->lastInsertId();
-        $response->getBody()->write(json_encode($data));
-        return $response->withStatus(201)->withHeader('Content-Type', 'application/json');
-    }
-
-    /**
-     * Actualizar una fase
-     */
-    public function updatePhase(Request $request, Response $response, array $args): Response
-    {
-        $id = $args['id'];
-        $data = $request->getParsedBody();
-        $stmt = $this->db->prepare("UPDATE tournament_phases SET name = ?, slug = ?, phase_type = ?, has_sub_phases = ?, display_order = ?, is_unlocked = ? WHERE id = ?");
-        $stmt->execute([
-            $data['name'],
-            $data['slug'],
-            $data['phase_type'],
-            $data['has_sub_phases'],
-            $data['display_order'],
-            $data['is_unlocked'],
-            $id
-        ]);
-
-        return $response->withStatus(204);
-    }
-
-    /**
-     * Eliminar una fase
-     */
-    public function deletePhase(Request $request, Response $response, array $args): Response
-    {
-        $id = $args['id'];
-        $stmt = $this->db->prepare("DELETE FROM tournament_phases WHERE id = ?");
-        $stmt->execute([$id]);
-        return $response->withStatus(204);
-    }
-
-    /**
-     * Activar/Desactivar una fase de forma masiva en todos los años
-     */
-    public function bulkTogglePhase(Request $request, Response $response): Response
-    {
-        $data = $request->getParsedBody();
-        if (!isset($data['name']) || !isset($data['is_unlocked'])) {
-            $response->getBody()->write(json_encode(['error' => 'Missing parameters name or is_unlocked']));
-            return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+        if (!empty($queryParams['year'])) {
+            $conditions[] = 't.year = ?';
+            $values[] = (int) $queryParams['year'];
         }
 
-        $stmt = $this->db->prepare("UPDATE tournament_phases SET is_unlocked = ? WHERE name = ?");
-        $stmt->execute([$data['is_unlocked'], $data['name']]);
+        if (!empty($queryParams['tournament_id'])) {
+            $conditions[] = 'tp.tournament_id = ?';
+            $values[] = (int) $queryParams['tournament_id'];
+        }
 
-        $response->getBody()->write(json_encode(['status' => 'success', 'updated_rows' => $stmt->rowCount()]));
-        return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+        if (!empty($queryParams['phase_id'])) {
+            $conditions[] = 'tv.phase_id = ?';
+            $values[] = (int) $queryParams['phase_id'];
+        }
+
+        if (!empty($conditions)) {
+            $sql .= ' WHERE ' . implode(' AND ', $conditions);
+        }
+
+        $sql .= ' ORDER BY t.year DESC, tp.display_order ASC, tv.display_order ASC, tv.id DESC';
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($values);
+
+        $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $response->getBody()->write(json_encode($videos));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    /**
+     * Obtener detalle de un video para admin
+     */
+    public function getAdminVideoById(Request $request, Response $response, array $args): Response
+    {
+        $id = (int) ($args['id'] ?? 0);
+
+        $stmt = $this->db->prepare("\n            SELECT\n                tv.*,\n                tp.name AS phase_name,\n                tp.slug AS phase_slug,\n                tp.tournament_id,\n                t.year AS tournament_year,\n                t.name AS tournament_name\n            FROM tournament_videos tv\n            JOIN tournament_phases tp ON tv.phase_id = tp.id\n            JOIN tournaments t ON tp.tournament_id = t.id\n            WHERE tv.id = ?\n            LIMIT 1\n        ");
+        $stmt->execute([$id]);
+
+        $video = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$video) {
+            $response->getBody()->write(json_encode(['error' => 'Video not found']));
+            return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
+        }
+
+        $response->getBody()->write(json_encode($video));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     /**
@@ -250,17 +174,19 @@ class TournamentController
     {
         $id = $args['id'];
         $data = $request->getParsedBody();
-        $stmt = $this->db->prepare("UPDATE tournament_videos SET sub_phase = ?, title = ?, video_url = ?, thumbnail_url = ?, video_type = ?, team_home = ?, team_away = ?, display_order = ?, is_active = ? WHERE id = ?");
+
+        $stmt = $this->db->prepare("UPDATE tournament_videos SET phase_id = ?, sub_phase = ?, title = ?, video_url = ?, thumbnail_url = ?, video_type = ?, team_home = ?, team_away = ?, display_order = ?, is_active = ? WHERE id = ?");
         $stmt->execute([
-            $data['sub_phase'],
+            $data['phase_id'],
+            $data['sub_phase'] ?? null,
             $data['title'],
             $data['video_url'],
-            $data['thumbnail_url'],
-            $data['video_type'],
-            $data['team_home'],
-            $data['team_away'],
-            $data['display_order'],
-            $data['is_active'],
+            $data['thumbnail_url'] ?? null,
+            $data['video_type'] ?? 'highlights',
+            $data['team_home'] ?? null,
+            $data['team_away'] ?? null,
+            $data['display_order'] ?? 0,
+            $data['is_active'] ?? 1,
             $id
         ]);
 
@@ -276,33 +202,5 @@ class TournamentController
         $stmt = $this->db->prepare("DELETE FROM tournament_videos WHERE id = ?");
         $stmt->execute([$id]);
         return $response->withStatus(204);
-    }
-
-    /**
-     * Guardar datos de la final (Upsert)
-     */
-    public function saveFinalData(Request $request, Response $response): Response
-    {
-        $data = $request->getParsedBody();
-
-        // Usar REPLACE INTO o INSERT ... ON DUPLICATE KEY UPDATE ya que tournament_id es UNIQUE
-        $stmt = $this->db->prepare("
-            REPLACE INTO tournament_finals 
-            (tournament_id, team_home_name, team_home_logo_url, team_away_name, team_away_logo_url, score_home, score_away, stadium_name, match_date) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ");
-        $stmt->execute([
-            $data['tournament_id'],
-            $data['team_home_name'],
-            $data['team_home_logo_url'] ?? null,
-            $data['team_away_name'],
-            $data['team_away_logo_url'] ?? null,
-            $data['score_home'] ?? 0,
-            $data['score_away'] ?? 0,
-            $data['stadium_name'] ?? null,
-            $data['match_date'] ?? null
-        ]);
-
-        return $response->withStatus(200);
     }
 }

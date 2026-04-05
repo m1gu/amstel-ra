@@ -1,7 +1,7 @@
 // frontend/src/components/Sidebar.jsx
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { BarChart3, Layers, Trophy, MapPin, LogOut } from 'lucide-react';
+import { BarChart3, Trophy, LogOut } from 'lucide-react';
 
 const Sidebar = ({ handleLogout }) => {
     return (
@@ -22,34 +22,18 @@ const Sidebar = ({ handleLogout }) => {
                 </NavLink>
 
                 <NavLink
-                    to="/admin/cms"
-                    className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
-                >
-                    <Layers size={20} />
-                    <span>Contenido AR</span>
-                </NavLink>
-
-                <NavLink
                     to="/admin/tournaments"
                     className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
                 >
                     <Trophy size={20} />
-                    <span>Torneos y Videos</span>
-                </NavLink>
-
-                <NavLink
-                    to="/admin/locations"
-                    className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
-                >
-                    <MapPin size={20} />
-                    <span>Puntos de Venta</span>
+                    <span>Videos</span>
                 </NavLink>
             </nav>
 
             <div className="sidebar-footer">
                 <button onClick={handleLogout} className="sidebar-logout">
                     <LogOut size={18} />
-                    <span>Cerrar Sesión</span>
+                    <span>Cerrar Sesion</span>
                 </button>
             </div>
         </div>
